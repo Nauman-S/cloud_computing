@@ -4,14 +4,17 @@
   "private": true,
   "dependencies": {
     "cra-template": "1.2.0",
+    "env-cmd": "^10.1.0",
     "react": "^18.2.0 ",
     "react-dom": "^18.2.0 ",
     "react-scripts": "5.0.1",
     "web-vitals": "^4.2.4"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
+    "start": "env-cmd -f .env.prod react-scripts start",
+    "start:prod": "env-cmd -f .env.prod react-scripts start",
+    "start:local": "env-cmd -f .env.local react-scripts start",
+    "build": "env-cmd -f .env.prod react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
