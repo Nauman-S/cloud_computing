@@ -15,7 +15,7 @@ function App() {
           target="_blank"
           rel="noopener noreferrer"
         >
-         Cloud Computing
+          {process.env.REACT_APP_NAME} - {process.env.REACT_APP_ENV}
         </a>
       </header>
     </div>
