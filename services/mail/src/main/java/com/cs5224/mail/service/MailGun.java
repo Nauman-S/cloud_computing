@@ -43,7 +43,7 @@ public class MailGun implements HttpMailSender {
 
         try {
             MailGunSimpleRequest mailGunSimpleRequest = new MailGunSimpleRequest();
-            mailGunSimpleRequest.setTo(request.getEmailAddress());
+            mailGunSimpleRequest.setTo(request.getEmail());
             mailGunSimpleRequest.setText(String.format("The otp is %s", request.getOtp()));
             mailGunSimpleRequest.setSubject("OTP Notification");
             mailGunSimpleRequest.setFrom(from);

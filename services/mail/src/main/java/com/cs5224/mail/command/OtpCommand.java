@@ -34,7 +34,7 @@ public class OtpCommand {
 
 
     private boolean validate(OtpRequest otpRequest) {
-        return !StringUtils.isEmpty(otpRequest.getOtp()) && !StringUtils.isEmpty(otpRequest.getEmailAddress()) ;
+        return !StringUtils.isEmpty(otpRequest.getOtp()) && !StringUtils.isEmpty(otpRequest.getEmail()) ;
     }
 
 }

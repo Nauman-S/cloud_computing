@@ -6,6 +6,6 @@ import lombok.Setter;
 @Setter
 @Getter
 public class OtpRequest extends MailBaseRequest{
-    private String emailAddress;
+    private String email;
     private String otp;
 }
