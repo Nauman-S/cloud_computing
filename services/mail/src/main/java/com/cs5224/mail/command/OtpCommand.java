@@ -34,7 +34,13 @@ public class OtpCommand {
 
 
     private boolean validate(OtpRequest otpRequest) {
-        return !StringUtils.isEmpty(otpRequest.getOtp()) && !StringUtils.isEmpty(otpRequest.getEmail()) ;
+        return !StringUtils.isEmpty(otpRequest.getOtpCode()) &&
+                !StringUtils.isEmpty(otpRequest.getOtpValidity()) &&
+                !StringUtils.isEmpty(otpRequest.getVerifyLink()) &&
+                !StringUtils.isEmpty(otpRequest.getUsername()) &&
+                !StringUtils.isEmpty(otpRequest.getVerifyText()) &&
+                !StringUtils.isEmpty(otpRequest.getMessage());
+
     }
 
 }

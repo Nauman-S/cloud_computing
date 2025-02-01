@@ -7,9 +7,8 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class MailGunSimpleRequest {
+public class MailGunRequest {
     private String from;
     private String to;
     private String subject;
-    private String text;
 }

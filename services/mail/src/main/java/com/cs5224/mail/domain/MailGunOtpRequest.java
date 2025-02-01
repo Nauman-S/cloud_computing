@@ -1,17 +1,27 @@
-package com.cs5224.mail.model;
+package com.cs5224.mail.domain;
 
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-@Setter
 @Getter
+@Setter
 @ToString
-public class OtpRequest extends MailBaseRequest{
+public class MailGunOtpRequest {
+
+    private String contactLink;
+
     private String verifyLink;
+
     private String otpValidity;
+
     private String otpCode;
-    private String username;
+
+    private String userName;
+
     private String verifyText;
+
     private String message;
+
+    private String appName;
 }
