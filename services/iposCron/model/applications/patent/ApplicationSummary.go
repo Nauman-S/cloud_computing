@@ -1,20 +1,13 @@
 package patent
 
-import (
-	"iposCron/model/applications"
-)
-
 type ApplicationSummary struct {
-	ApplicationNum                string                  `json:"applicationNum"`
-	FilingDate                    applications.CustomDate `json:"filingDate"`
-	ClassSubClass                 string                  `json:"classSubClass"`
-	Status                        string                  `json:"status"`
-	ApprovedDate                  applications.CustomDate `json:"approvedDate"`
-	UkDesignNum                   string                  `json:"ukDesignNum"`
-	UkRegistrationDate            applications.CustomDate `json:"ukRegistrationDate"`
-	InternationalRegistrationNum  string                  `json:"internationalRegistrationNum"`
-	InternationalRegistrationDate applications.CustomDate `json:"internationalRegistrationDate"`
-	RenewalDueDate                applications.CustomDate `json:"renewalDueDate"`
-	ExpiryDate                    applications.CustomDate `json:"expiryDate"`
-	LodgementDate                 applications.CustomDate `json:"lodgementDate"`
+	ApplicationNum                        string `json:"applicationNum" bson:"applicationNum"`
+	ApplicationType                       string `json:"applicationType" bson:"applicationType"`
+	ApplicationStatus                     string `json:"applicationStatus" bson:"applicationStatus"`
+	PublicationPatentNumForOldApplication string `json:"PublicationPatentNumForOldApplication" bson:"PublicationPatentNumForOldApplication"`
+	TitleOfInvention                      string `json:"TitleOfInvention" bson:"TitleOfInvention"`
+	FilingDate                            string `json:"filingDate" bson:"filingDate"`
+	LodgementDate                         string `json:"lodgementDate" bson:"lodgementDate"`
+	DateOfPublication                     string `json:"dateOfPublication" bson:"dateOfPublication"`
+	IPC                                   string `json:"ipc" bson:"ipc"`
 }

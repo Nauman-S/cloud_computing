@@ -34,4 +34,5 @@ func fetchDailyPatentApplication() {
 		logger.Error("insert patent application failed", zap.Error(err))
 		return
 	}
+	logger.Info("insert success")
 }
