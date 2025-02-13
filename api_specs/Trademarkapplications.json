@@ -1,0 +1,859 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Data.gov.sg APIs",
+    "description": "\"APIs for People\"",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "https://api.data.gov.sg/v1"
+    }
+  ],
+  "paths": {
+    "/technology/ipos/trademarks": {
+      "get": {
+        "summary": "Get trademark applications lodged with IPOS",
+        "description": "- Updated daily from IPOS\n- Use the `lodgement_date` parameter to retrieve applications lodged at that moment in time\n",
+        "tags": ["technology"],
+        "parameters": [
+          {
+            "name": "lodgement_date",
+            "in": "query",
+            "description": "YYYY-MM-DD",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Trademark application information",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "lodgement_date": {
+                      "type": "string",
+                      "description": "Date of lodgement of application from IPOS",
+                      "format": "date"
+                    },
+                    "count": {
+                      "type": "integer",
+                      "enum": 0
+                    },
+                    "applications": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/IposTrademarkApplications"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "$ref": "#/components/responses/Error"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "IposTrademarkApplications": {
+        "type": "object",
+        "properties": {
+          "summary": {
+            "type": "object",
+            "properties": {
+              "applicationNum": {
+                "description": "System number that auto generated which is unique to represent a TM application number",
+                "type": "string"
+              },
+              "filingDate": {
+                "description": "Date that national application is filed/ Given by WIPO for IR case",
+                "type": "string",
+                "format": "date"
+              },
+              "internationalRegDate": {
+                "description": "Date of International Registration given by WIPO",
+                "type": "string",
+                "format": "date"
+              },
+              "singaporeProtectionDate": {
+                "description": "Given by WIPO for IR case",
+                "type": "string",
+                "format": "date"
+              },
+              "journals": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "journalNum": {
+                      "description": "Auto generated",
+                      "type": "string"
+                    },
+                    "journalDate": {
+                      "description": "Date that journal is published",
+                      "type": "string",
+                      "format": "date"
+                    },
+                    "journalStatus": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "description": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "seriesMarkNum": {
+                "description": "Series Marks - By default = 0",
+                "type": "integer"
+              },
+              "disclaimerLimitation": {
+                "description": "Limitation of goods/services",
+                "type": "string"
+              },
+              "applicationType": {
+                "description": "Application Type",
+                "type": "string"
+              },
+              "tradeMarkType": {
+                "description": "Trade Mark Type",
+                "type": "string"
+              },
+              "descriptionPaticularFeatureOfMark": {
+                "description": "Applicable for non-conventional mark",
+                "type": "string"
+              },
+              "markStatus": {
+                "description": "Mark Status",
+                "type": "string"
+              },
+              "markStatusDate": {
+                "description": "Date that the status should be updated",
+                "type": "string",
+                "format": "date"
+              },
+              "statusUpdateDate": {
+                "description": "Date that the status is updated",
+                "type": "string",
+                "format": "date"
+              },
+              "registrationProcedureCompletionDate": {
+                "description": "Date that the application is registered",
+                "type": "string",
+                "format": "date"
+              },
+              "expiryDate": {
+                "description": "Date that the application is expired",
+                "type": "string",
+                "format": "date"
+              },
+              "publicationDate": {
+                "description": "Date that the application is published",
+                "type": "string",
+                "format": "date"
+              }
+            }
+          },
+          "internationalRegistrationDesignatingSingaporeDetails": {
+            "type": "object",
+            "properties": {
+              "irNum": {
+                "description": "IR Number given by WIPO",
+                "type": "string"
+              },
+              "irDate": {
+                "description": "Given by WIPO",
+                "type": "string",
+                "format": "date"
+              },
+              "irNotificationDate": {
+                "description": "Date that the IR was notified to Singapore",
+                "type": "string",
+                "format": "date"
+              },
+              "subsequentDesignationNum": {
+                "description": "Auto generated number for each subsequent designation",
+                "type": "integer"
+              },
+              "subsequentDesignationDate": {
+                "description": "Date of Subsequent Designation (given by WIPO)",
+                "type": "string",
+                "format": "date"
+              },
+              "subesequentDesignationNotificationDate": {
+                "description": "Date that the IR was notified to Singapore",
+                "type": "string",
+                "format": "date"
+              }
+            }
+          },
+          "internationalApplicationDetails": {
+            "type": "object",
+            "properties": {
+              "IANum": {
+                "description": "System number that auto generated which is unique to represent an IA number",
+                "type": "string"
+              },
+              "IRNum": {
+                "description": "IR Number given by WIPO",
+                "type": "string"
+              }
+            }
+          },
+          "goodsAndServicesSpecifications": {
+            "description": "Specification of Goods/Services",
+            "type": "object",
+            "properties": {
+              "goodsServices": {
+                "description": "Goods/Services",
+                "type": "string"
+              },
+              "classNum": {
+                "description": "01-45",
+                "type": "string"
+              },
+              "classStatus": {
+                "description": "Class Status",
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "string"
+                  },
+                  "description": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "priorityClaimsDetails": {
+            "type": "object",
+            "description": "Priority Claims Details",
+            "properties": {
+              "goodsAndServices": {
+                "description": "Good and Services",
+                "type": "string"
+              },
+              "classNum": {
+                "description": "Class No",
+                "type": "string"
+              },
+              "priorityClaimsDate": {
+                "description": "Date when the priority is claimed.",
+                "type": "string",
+                "format": "date"
+              },
+              "country": {
+                "type": "string"
+              }
+            }
+          },
+          "transformationApplicationMadridFrom": {
+            "description": "Transformation Application under Madrid Protocol",
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "applicationNum": {
+                  "description": "Application Number",
+                  "type": "string"
+                },
+                "irNum": {
+                  "description": "IR Number given by WIPO",
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "transformationApplicationMadridInto": {
+            "description": "Transformation Application under Madrid Protocol",
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "applicationNum": {
+                  "description": "Application Number",
+                  "type": "string"
+                },
+                "classNum": {
+                  "description": "01-45",
+                  "type": "string"
+                },
+                "dateOfProtection": {
+                  "description": "Given by WIPO for IR case",
+                  "type": "string",
+                  "format": "date"
+                }
+              }
+            }
+          },
+          "replacementApplicationMadridBy": {
+            "description": "Replacement Application under Madrid Protocol",
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "applicationNum": {
+                  "description": "Application Number",
+                  "type": "string"
+                },
+                "irNum": {
+                  "description": "IR Number given by WIPO",
+                  "type": "string"
+                },
+                "classNum": {
+                  "description": "01-45",
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "replacementApplicationMadridReplaces": {
+            "description": "Replacement Application under Madrid Protocol",
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "applicationNum": {
+                  "description": "Application Number",
+                  "type": "string"
+                },
+                "dateOfProtection": {
+                  "description": "Given by WIPO for IR case",
+                  "type": "string",
+                  "format": "date"
+                },
+                "classNum": {
+                  "description": "01-45",
+                  "type": "string"
+                },
+                "goodsServices": {
+                  "description": "Affected goods and/or services",
+                  "type": "string"
+                },
+                "expiryDate": {
+                  "description": "Date that the application is expired",
+                  "type": "string"
+                },
+                "publicationDate": {
+                  "description": "Date that the application is published",
+                  "type": "string",
+                  "format": "date"
+                },
+                "priorityClaimsDetails": {
+                  "type": "array",
+                  "description": "Priority Claims Details",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "goodsAndServices": {
+                        "description": "Good and Services",
+                        "type": "string"
+                      },
+                      "classNum": {
+                        "description": "Class No.",
+                        "type": "string"
+                      },
+                      "priorityClaimsDate": {
+                        "description": "Priority Claims Date",
+                        "type": "string",
+                        "format": "date"
+                      },
+                      "country": {
+                        "description": "Country",
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "markClauses": {
+            "description": "Mark Clauses entered by Examiners",
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "value": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "markIndex": {
+            "description": "Mark Index",
+            "type": "object",
+            "properties": {
+              "wordsInMark": {
+                "description": "Words in Mark entered by Mark Index Officer",
+                "type": "string"
+              },
+              "descrOfDevice": {
+                "description": "Device description entered by Mark Index Officer",
+                "type": "string"
+              },
+              "enTransliteration": {
+                "description": "English Translation entered by Mark Index Officer.",
+                "type": "string"
+              },
+              "enTranslation": {
+                "description": "English Translation entered by Mark Index Officer",
+                "type": "string"
+              }
+            }
+          },
+          "currentApplicantProprietorDetails": {
+            "description": "Current Applicant/Proprietor Details",
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "applicantType": {
+                  "description": "Type of applicant",
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "string"
+                    },
+                    "description": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "uenCompanyCode": {
+                  "description": "UEN/Company Code generated by system/assigned by officer",
+                  "type": "string"
+                },
+                "name": {
+                  "description": "Name of applicant",
+                  "type": "string"
+                },
+                "address": {
+                  "description": "Address of applicant",
+                  "type": "string"
+                },
+                "countryOfIncorporationOrResidence": {
+                  "description": "Country of Incorporation/Residence",
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "string"
+                    },
+                    "description": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "stateOfIncorporation": {
+                  "description": "State of Incorporation",
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "string"
+                    },
+                    "description": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "nationality": {
+                  "description": "Nationality",
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "string"
+                    },
+                    "description": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "soleproprietorPartnerName": {
+                  "type": "string",
+                  "description": "Sole Proprietor or Partner's Name"
+                }
+              }
+            }
+          },
+          "agentCorrespondenceDetails": {
+            "description": "Agent/Correspondence Details",
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "representationType": {
+                  "description": "indicator to represent if represent as an agent",
+                  "type": "string"
+                },
+                "actionRepresenting": {
+                  "description": "Agent represent for which action",
+                  "type": "string"
+                },
+                "representativeName": {
+                  "description": "Representative or C/O Name",
+                  "type": "string"
+                },
+                "addressForServiceInSingapore": {
+                  "description": "Agent address",
+                  "type": "string"
+                },
+                "agent": {
+                  "type": "object",
+                  "properties": {
+                    "uenCompanyCode": {
+                      "description": "Agent UEN/ Company Code",
+                      "type": "string"
+                    },
+                    "name": {
+                      "description": "Agent Name",
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "HMGcases": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "caseNum": {
+                  "description": "HMG case number that are auto generated which is unique to represent a HMG case",
+                  "type": "string"
+                },
+                "caseType": {
+                  "type": "object",
+                  "description": "Case Type",
+                  "properties": {
+                    "code": {
+                      "type": "string"
+                    },
+                    "description": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "caseStatus": {
+                  "description": "Opposition Status (Case Status) - Current Status of the case. E.g. Pending Successfully, pending appeal period.",
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "string"
+                    },
+                    "description": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "classNum": {
+                  "description": "Class number being opposed",
+                  "type": "string"
+                },
+                "lodgeDate": {
+                  "type": "string",
+                  "format": "date"
+                }
+              }
+            }
+          },
+          "logogramArticle6TerDetails": {
+            "description": "Logogram/ Article 6 Ter Details",
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "applicationNum": {
+                  "description": "Application Number - System generated",
+                  "type": "string"
+                },
+                "applicationStatus": {
+                  "description": "Application Status",
+                  "type": "string"
+                },
+                "lodgementDate": {
+                  "description": "Date that logogram is sent to IPOS",
+                  "type": "string",
+                  "format": "date"
+                },
+                "name": {
+                  "type": "string",
+                  "description": "Organization Name"
+                },
+                "address": {
+                  "description": "Organization Address",
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "license": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "isLicensor": {
+                  "description": "Licensor if value is true",
+                  "type": "boolean"
+                },
+                "isLicenseAgainstAllGoodsServices": {
+                  "description": "License to be recorded against all goods and/or services",
+                  "type": "boolean"
+                },
+                "particularsOfLicensorLicensee": {
+                  "description": "Particulars of Licensor/Licensee",
+                  "type": "object",
+                  "properties": {
+                    "licensorLicenseeName": {
+                      "type": "string"
+                    },
+                    "licensorLicenseeCode": {
+                      "type": "string"
+                    },
+                    "address": {
+                      "type": "string"
+                    },
+                    "representationType": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "description": {
+                          "type": "string"
+                        }
+                      }
+                    },
+                    "incorporationCountry": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "description": {
+                          "type": "string"
+                        }
+                      }
+                    },
+                    "residenceCountry": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "description": {
+                          "type": "string"
+                        }
+                      }
+                    },
+                    "detailsOfLicense": {
+                      "type": "string"
+                    },
+                    "licenseType": {
+                      "description": "License Type (Exclusive or Non-Exclusive License)",
+                      "type": "string"
+                    },
+                    "licenseStartDate": {
+                      "description": "Licence Start Date",
+                      "type": "string",
+                      "format": "date"
+                    },
+                    "licenseEndDate": {
+                      "description": "License End Date",
+                      "type": "string",
+                      "format": "date"
+                    },
+                    "licenseDetails": {
+                      "description": "Details of license to be registered, amended or terminated",
+                      "type": "string"
+                    },
+                    "licenseRefNum": {
+                      "description": "Security interest ref. number",
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "securityInterest": {
+            "type": "object",
+            "properties": {
+              "securityInterestRefNum": {
+                "description": "Security interest ref. no",
+                "type": "string"
+              },
+              "lodgementDate": {
+                "description": "Lodgement Date",
+                "type": "string",
+                "format": "date"
+              },
+              "grantorParticulars": {
+                "type": "array",
+                "description": "Particulars of Grantor",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "grantorName": {
+                      "type": "string",
+                      "description": "Name of Grantor"
+                    },
+                    "grantorAddress": {
+                      "type": "string",
+                      "description": "Address of Grantor"
+                    }
+                  }
+                }
+              },
+              "granteeParticulars": {
+                "type": "array",
+                "description": "Particulars of Grantee",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "granteeName": {
+                      "type": "string",
+                      "description": "Name of Grantee"
+                    },
+                    "granteeAddress": {
+                      "type": "string",
+                      "description": "Address of Grantee"
+                    }
+                  }
+                }
+              },
+              "securityInterestDetails": {
+                "description": "Details of Security Interest to be Registered, Amended or Terminated",
+                "type": "string"
+              }
+            }
+          },
+          "transferOfOwnership": {
+            "type": "array",
+            "description": "Transfer of Ownership",
+            "items": {
+              "type": "object",
+              "properties": {
+                "currentApplicantProprietorDetails": {
+                  "description": "Details of Current Applicant/ Proprietor",
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "address": {
+                      "type": "string"
+                    },
+                    "countryOfIncorporation": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "subsequentApplicantProprietorDetails": {
+                  "description": "Details of Subsequent Applicant/ Proprietor",
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "address": {
+                      "type": "string"
+                    },
+                    "countryOfIncorporation": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "dateOfTransferOfOwnership": {
+                  "description": "Date of Transfer of Ownership",
+                  "type": "string",
+                  "format": "date"
+                },
+                "detailsOfTransferOfOwnershipToBeRegistered": {
+                  "description": "Details of Transfer of Ownership to be Registered",
+                  "type": "string"
+                },
+                "fullOrPartial": {
+                  "description": "Full/Partial transfer of ownership",
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "documents": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "lodgementDate": {
+                  "type": "string",
+                  "format": "date"
+                },
+                "fileUrl": {
+                  "type": "string"
+                },
+                "docType": {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "string"
+                    },
+                    "description": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "Error": {
+        "type": "object",
+        "required": ["code", "message"],
+        "properties": {
+          "code": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "message": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "responses": {
+      "Error": {
+        "description": "Error information",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            }
+          }
+        }
+      }
+    }
+  }
+}
