@@ -16,6 +16,7 @@ func InsertPatents(patent *patent.PatentApplicationResponse) error {
 	}
 	interfaceSlice := make([]interface{}, len(patent.Applications))
 	for i, app := range patent.Applications {
+		app.LodgementDate = patent.LodgementDate
 		interfaceSlice[i] = app
 	}
 	many, err := collection.InsertMany(context.Background(), interfaceSlice)
