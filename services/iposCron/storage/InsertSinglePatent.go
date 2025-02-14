@@ -2,6 +2,8 @@ package storage
 
 import (
 	"context"
+	"crypto/sha256"
+	"encoding/hex"
 	"errors"
 	"fmt"
 	"iposCron/config"
@@ -15,7 +17,10 @@ func InsertPatents(patent *patent.PatentApplicationResponse) error {
 		return nil
 	}
 	interfaceSlice := make([]interface{}, len(patent.Applications))
+
 	for i, app := range patent.Applications {
+		hash := sha256.Sum256([]byte(app.ApplicationNum))
+		app.ID = hex.EncodeToString(hash[:])
 		app.LodgementDate = patent.LodgementDate
 		interfaceSlice[i] = app
 	}

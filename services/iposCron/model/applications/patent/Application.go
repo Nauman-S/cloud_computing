@@ -17,5 +17,6 @@ type Application struct {
 	AgentCorrespondenceDetails        []AgentCorrespondenceDetail        `json:"agentCorrespondenceDetails" bson:"agentCorrespondenceDetails"`
 	CurrentApplicantProprietorDetails []CurrentApplicantProprietorDetail `json:"currentApplicantProprietorDetails" bson:"currentApplicantProprietorDetails"`
 	ApplicationNum                    string                             `json:"applicationNum" bson:"applicationNum"`
-	LodgementDate                     string
+	LodgementDate                     string                             `bson:"lodgementDate"`
+	ID                                string                             `bson:"_id"`
 }
