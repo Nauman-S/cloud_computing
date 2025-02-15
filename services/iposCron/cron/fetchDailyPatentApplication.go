@@ -10,19 +10,15 @@ import (
 	"time"
 )
 
-func DailyDesignCron(parentCtx context.Context, logger *zap.Logger) *Cron {
-	return StartCron(5*time.Second, parentCtx, fetchDailyPatentApplication, "patent application", logger)
+func DailyPatentCron(parentCtx context.Context, logger *zap.Logger) *ScheduledCron {
+	return CreateScheduledCron(10*time.Second, parentCtx, fetchDailyPatentApplication, "patent application", logger)
 }
 
 func fetchDailyPatentApplication() {
 	logger, _ := config.GetLogger()
-	dateStr := "2019-10-10"
-	t, err := time.Parse("2006-01-02", dateStr)
-	if err != nil {
-		logger.Error("parse date failed", zap.String("dateStr", dateStr), zap.Error(err))
-		return
-	}
+	t, _ := time.Parse("2006-01-02", "2019-10-10")
 	appDate := applications.CustomDate(t)
+
 	designApplication, err := patent.FetchPatentApplications(appDate)
 	if err != nil {
 		logger.Error("fetch patent application failed", zap.Error(err))

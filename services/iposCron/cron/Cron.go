@@ -8,9 +8,8 @@ import (
 	"time"
 )
 
-type Cron struct {
+type ScheduledCron struct {
 	executable func()
-	ticker     *time.Ticker
 	frequency  time.Duration
 	stopped    atomic.Bool
 	ctx        context.Context
@@ -20,45 +19,68 @@ type Cron struct {
 	logger     *zap.Logger
 }
 
-func StartCron(frequency time.Duration, parentCtx context.Context, executable func(), name string, logger *zap.Logger) *Cron {
-	logger.Info("Starting Cron", zap.String("name", name))
+func CreateScheduledCron(frequency time.Duration, parentCtx context.Context, executable func(), name string, logger *zap.Logger) *ScheduledCron {
+	logger.Info("Starting Cron For Daily Run - ", zap.String("name", name))
 	ctx, cancel := context.WithCancel(parentCtx)
-	return &Cron{
+	return &ScheduledCron{
 		executable: executable,
-		frequency:  frequency,
 		ctx:        ctx,
 		cancel:     cancel,
 		name:       name,
 		logger:     logger,
+		frequency:  frequency,
 	}
 }
 
-func (s *Cron) Start() {
+func (s *ScheduledCron) scheduleRun(hour, minute int) time.Time {
+	sgt, _ := time.LoadLocation("Asia/Singapore")
+	now := time.Now().In(sgt)
+	nextRun := time.Date(now.Year(), now.Month(), now.Day(), hour, minute, 0, 0, sgt)
+	return s.scheduleNextRun(nextRun)
+}
+
+func (s *ScheduledCron) scheduleNextRun(currentRun time.Time) time.Time {
+	sgt, _ := time.LoadLocation("Asia/Singapore")
+	now := time.Now().In(sgt)
+	for now.After(currentRun) {
+		if s.frequency > 0 {
+			currentRun = currentRun.Add(s.frequency)
+		} else {
+			currentRun = currentRun.Add(24 * time.Hour)
+		}
+
+	}
+	return currentRun
+}
+
+func (s *ScheduledCron) Start(hour, minute int) {
 	s.wg.Add(1)
 	go func() {
+		nextRun := s.scheduleRun(hour, minute)
 		defer s.wg.Done()
-		s.ticker = time.NewTicker(s.frequency)
 
 		for {
+			s.logger.Info("Next run scheduled", zap.String("name", s.name), zap.Time("time", nextRun))
+			sleepDuration := time.Until(nextRun)
+			timer := time.NewTimer(sleepDuration)
 			select {
 			case <-s.ctx.Done():
 				s.Stop()
 				return
-			case <-s.ticker.C:
+			case <-timer.C:
 				s.logger.Info("Executing job", zap.String("name", s.name))
 				s.executable()
+
 			}
+			nextRun = s.scheduleNextRun(nextRun)
 		}
+
 	}()
 
 }
 
-func (s *Cron) Stop() {
+func (s *ScheduledCron) Stop() {
 	if s.stopped.CompareAndSwap(false, true) {
-		if s.ticker != nil {
-			s.ticker.Stop()
-		}
-
 		s.cancel()
 		s.wg.Wait()
 		s.logger.Info("Cron stopped", zap.String("name", s.name))

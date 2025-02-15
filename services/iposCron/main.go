@@ -22,8 +22,8 @@ func main() {
 
 	logger.Info("Cron Application Successfully Started")
 
-	c := cron.DailyDesignCron(ctx, logger)
-	c.Start()
+	c := cron.DailyPatentCron(ctx, logger)
+	c.Start(14, 14)
 
 	<-stop
 	cancel()
