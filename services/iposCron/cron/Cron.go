@@ -20,7 +20,7 @@ type ScheduledCron struct {
 }
 
 func CreateScheduledCron(frequency time.Duration, parentCtx context.Context, executable func(), name string, logger *zap.Logger) *ScheduledCron {
-	logger.Info("Starting Cron For Daily Run - ", zap.String("name", name))
+	logger.Info("Created Cron", zap.String("name", name))
 	ctx, cancel := context.WithCancel(parentCtx)
 	return &ScheduledCron{
 		executable: executable,

@@ -40,10 +40,10 @@ func CheckMongoConnection() error {
 }
 
 func GetMongoConnection(ctx context.Context) (*MongoConnection, error) {
-	if ctx == nil {
-		ctx = context.Background()
-	}
 	if initialized.CompareAndSwap(false, true) {
+		if ctx == nil {
+			ctx = context.Background()
+		}
 		err := initMongoConnection(ctx)
 		if err != nil {
 			return nil, err
@@ -51,4 +51,13 @@ func GetMongoConnection(ctx context.Context) (*MongoConnection, error) {
 		return mongoConnection, nil
 	}
 	return mongoConnection, nil
+}
+
+func GetListDatabaseOptions() *options.ListDatabasesOptions {
+	NameOnly := false
+	AuthorizedDatabases := false
+	return &options.ListDatabasesOptions{
+		NameOnly:            &NameOnly,
+		AuthorizedDatabases: &AuthorizedDatabases,
+	}
 }

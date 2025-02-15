@@ -12,7 +12,7 @@ import (
 
 func InsertPatents(patent *patent.PatentApplicationResponse) error {
 	connection, _ := config.GetMongoConnection(nil)
-	collection := connection.Client.Database("ipos").Collection("patent")
+	collection := connection.Client.Database(DATABASE_IPOS).Collection(COLLECTION_IPOS_PATENT)
 	if patent.Count == 0 {
 		return nil
 	}

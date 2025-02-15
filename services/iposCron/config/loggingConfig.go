@@ -13,7 +13,7 @@ var createdLogger atomic.Bool
 var Logger *zap.Logger
 var LoggerHistoricPatent *zap.Logger
 var LoggerDailyPatent *zap.Logger
-var LoggerDBSizeCron *zap.Logger
+var LoggerDBStats *zap.Logger
 
 func getZapEncoderConfig() zapcore.EncoderConfig {
 	return zapcore.EncoderConfig{
@@ -46,7 +46,7 @@ func CreateLoggers() error {
 		if err != nil {
 			return err
 		}
-		LoggerDBSizeCron, err = createLogger("db")
+		LoggerDBStats, err = createLogger("db")
 		if err != nil {
 			return err
 		}

@@ -33,10 +33,14 @@ func main() {
 	}
 	hc.Start(19, 18)
 
+	dc := cron.DBStatsCron(ctx)
+	dc.Start(19, 20)
+
 	<-stop
 	cancel()
 	c.Stop()
 	hc.Stop()
+	dc.Stop()
 	if err := config.Logger.Sync(); err != nil {
 		config.Logger.Error("Error syncing all logs", zap.Error(err))
 	}
