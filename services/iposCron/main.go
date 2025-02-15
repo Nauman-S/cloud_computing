@@ -41,11 +41,10 @@ func main() {
 	c.Stop()
 	hc.Stop()
 	dc.Stop()
-	if err := config.Logger.Sync(); err != nil {
-		config.Logger.Error("Error syncing all logs", zap.Error(err))
-	}
 
+	syncLoggers()
 	config.Logger.Info("Cron Application stopped")
+	_ = config.Logger.Sync()
 }
 
 func initializeMongoDB(ctx context.Context) {
@@ -71,5 +70,19 @@ func initializeLoggers() {
 		config.Logger.Fatal("error initializing logger", zap.Error(err))
 		_ = config.Logger.Sync()
 		os.Exit(1)
+	}
+}
+
+func syncLoggers() {
+	if err := config.LoggerDBStats.Sync(); err != nil {
+		config.Logger.Error("error syncing DBStatslogger", zap.Error(err))
+	}
+
+	if err := config.LoggerDailyPatent.Sync(); err != nil {
+		config.Logger.Error("error syncing Daily logger", zap.Error(err))
+	}
+
+	if err := config.LoggerHistoricPatent.Sync(); err != nil {
+		config.Logger.Error("error syncing Historic logger", zap.Error(err))
 	}
 }

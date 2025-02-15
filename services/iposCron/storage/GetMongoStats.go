@@ -26,6 +26,7 @@ func LogMongoStats(ctx context.Context) {
 			continue
 		}
 
+		var collectionCount int64
 		for _, collectionName := range collectionNames {
 			commandResult := db.RunCommand(ctx, bson.M{"collStats": collectionName})
 			var document bson.M
@@ -36,6 +37,11 @@ func LogMongoStats(ctx context.Context) {
 			}
 			logger.Info(fmt.Sprintf("Collection %s Storage size: %d bytes (%.2f MB)\n", collectionName, document["storageSize"], float64(document["storageSize"].(int32))/(1024*1024)))
 			logger.Info(fmt.Sprintf("Collection %s size: %d bytes (%.2f MB) \n", collectionName, document["size"], float64(document["size"].(int32))/(1024*1024)))
+			collectionCount, err = db.Collection(collectionName).CountDocuments(ctx, bson.D{})
+			if err != nil {
+				logger.Error(fmt.Sprintf("Error getting collection Count for collection %s, database %s", collectionName, database.Name), zap.Error(err))
+			}
+			logger.Info(fmt.Sprintf("Collection %s Collection Count: %d", collectionName, collectionCount))
 		}
 	}
 }
