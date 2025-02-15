@@ -6,16 +6,17 @@ import (
 	"go.uber.org/zap"
 	"io"
 	"iposCron/config"
-	"iposCron/model/applications"
 	"iposCron/model/applications/patent"
 	"net/http"
 	"net/url"
+	"time"
 )
 
 const PatentApplicationUri = "https://api.data.gov.sg/v1/technology/ipos/patents"
 
-func FetchPatentApplications(date applications.CustomDate) (*patent.PatentApplicationResponse, error) {
-	var logger = config.LoggerDailyPatent
+const dateFormat = "2006-01-02"
+
+func FetchPatentApplications(date time.Time, logger *zap.Logger) (*patent.PatentApplicationResponse, error) {
 	logger.Info("FetchPatentApplications")
 
 	client := config.GetDesignClient()
@@ -28,7 +29,7 @@ func FetchPatentApplications(date applications.CustomDate) (*patent.PatentApplic
 		return nil, err
 	}
 	query := baseURL.Query()
-	query.Set("lodgement_date", date.String())
+	query.Set("lodgement_date", date.Format(dateFormat))
 	baseURL.RawQuery = query.Encode()
 
 	if req, err = http.NewRequest("GET", baseURL.String(), nil); err != nil {
@@ -55,7 +56,7 @@ func FetchPatentApplications(date applications.CustomDate) (*patent.PatentApplic
 		logger.Error("FetchDesignApplications error", zap.Any("Body", string(body)))
 		return nil, fmt.Errorf(string(body))
 	}
-	logger.Info("FetchDesignApplications response", zap.Any("Body", string(body)))
+	logger.Info("FetchPatentApplications response", zap.Any("Body", string(body)))
 
 	var designApplication patent.PatentApplicationResponse
 	if err = json.Unmarshal(body, &designApplication); err != nil {

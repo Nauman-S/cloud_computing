@@ -23,11 +23,20 @@ func main() {
 	config.Logger.Info("Cron Application Successfully Started")
 
 	c := cron.DailyPatentCron(ctx)
-	c.Start(14, 47)
+	c.Start(19, 20)
+
+	historicStartDate := "2025-02-15"
+	hc, err := cron.HistoricalPatentCron(ctx, historicStartDate)
+	if err != nil {
+		config.Logger.Fatal("Error running Historic Cron", zap.Error(err))
+		_ = config.Logger.Sync()
+	}
+	hc.Start(19, 18)
 
 	<-stop
 	cancel()
 	c.Stop()
+	hc.Stop()
 	if err := config.Logger.Sync(); err != nil {
 		config.Logger.Error("Error syncing all logs", zap.Error(err))
 	}

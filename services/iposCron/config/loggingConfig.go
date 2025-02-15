@@ -11,7 +11,7 @@ import (
 var createdLogger atomic.Bool
 
 var Logger *zap.Logger
-var LoggerHistoricCron *zap.Logger
+var LoggerHistoricPatent *zap.Logger
 var LoggerDailyPatent *zap.Logger
 var LoggerDBSizeCron *zap.Logger
 
@@ -38,7 +38,7 @@ func getZapEncoderConfig() zapcore.EncoderConfig {
 func CreateLoggers() error {
 	if createdLogger.CompareAndSwap(false, true) {
 		var err error
-		LoggerHistoricCron, err = createLogger("historicPatent")
+		LoggerHistoricPatent, err = createLogger("historicPatent")
 		if err != nil {
 			return err
 		}
