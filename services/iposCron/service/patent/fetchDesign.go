@@ -15,7 +15,7 @@ import (
 const PatentApplicationUri = "https://api.data.gov.sg/v1/technology/ipos/patents"
 
 func FetchPatentApplications(date applications.CustomDate) (*patent.PatentApplicationResponse, error) {
-	logger, _ := config.GetLogger()
+	var logger = config.LoggerDailyPatent
 	logger.Info("FetchPatentApplications")
 
 	client := config.GetDesignClient()

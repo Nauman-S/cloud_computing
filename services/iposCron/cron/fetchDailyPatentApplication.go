@@ -10,12 +10,12 @@ import (
 	"time"
 )
 
-func DailyPatentCron(parentCtx context.Context, logger *zap.Logger) *ScheduledCron {
-	return CreateScheduledCron(10*time.Second, parentCtx, fetchDailyPatentApplication, "patent application", logger)
+func DailyPatentCron(parentCtx context.Context) *ScheduledCron {
+	return CreateScheduledCron(10*time.Second, parentCtx, fetchDailyPatentApplication, "patent application", config.LoggerDailyPatent)
 }
 
 func fetchDailyPatentApplication() {
-	logger, _ := config.GetLogger()
+	var logger = config.LoggerDailyPatent
 	t, _ := time.Parse("2006-01-02", "2019-10-10")
 	appDate := applications.CustomDate(t)
 

@@ -1,6 +1,7 @@
 package config
 
 import (
+	"fmt"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 	"sync/atomic"
@@ -9,7 +10,10 @@ import (
 
 var createdLogger atomic.Bool
 
-var logger *zap.Logger
+var Logger *zap.Logger
+var LoggerHistoricCron *zap.Logger
+var LoggerDailyPatent *zap.Logger
+var LoggerDBSizeCron *zap.Logger
 
 func getZapEncoderConfig() zapcore.EncoderConfig {
 	return zapcore.EncoderConfig{
@@ -31,17 +35,32 @@ func getZapEncoderConfig() zapcore.EncoderConfig {
 
 }
 
-func GetLogger() (*zap.Logger, error) {
+func CreateLoggers() error {
 	if createdLogger.CompareAndSwap(false, true) {
 		var err error
-		logger, err = createLogger()
-		logger.Info("Logger created")
-		return logger, err
+		LoggerHistoricCron, err = createLogger("historicPatent")
+		if err != nil {
+			return err
+		}
+		LoggerDailyPatent, err = createLogger("dailyPatent")
+		if err != nil {
+			return err
+		}
+		LoggerDBSizeCron, err = createLogger("db")
+		if err != nil {
+			return err
+		}
+		Logger, err = createLogger("app")
+		if err != nil {
+			return err
+		}
+		Logger.Info("Logger created")
+		return nil
 	}
-	return logger, nil
+	return nil
 }
 
-func createLogger() (*zap.Logger, error) {
+func createLogger(name string) (*zap.Logger, error) {
 	config := zap.Config{
 		Level:       zap.NewAtomicLevelAt(zap.InfoLevel),
 		Development: false,
@@ -51,7 +70,7 @@ func createLogger() (*zap.Logger, error) {
 		},
 		Encoding:         "json",
 		EncoderConfig:    getZapEncoderConfig(),
-		OutputPaths:      []string{"logs/app.log"},
+		OutputPaths:      []string{fmt.Sprintf("logs/%v.log", name)},
 		ErrorOutputPaths: []string{"stderr"},
 	}
 

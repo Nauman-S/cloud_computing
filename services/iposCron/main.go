@@ -17,48 +17,46 @@ func main() {
 
 	ctx, cancel := context.WithCancel(context.Background())
 
-	logger := initializeLogger()
-	initializeMongoDB(ctx, logger)
+	initializeLoggers()
+	initializeMongoDB(ctx)
 
-	logger.Info("Cron Application Successfully Started")
+	config.Logger.Info("Cron Application Successfully Started")
 
-	c := cron.DailyPatentCron(ctx, logger)
-	c.Start(14, 14)
+	c := cron.DailyPatentCron(ctx)
+	c.Start(14, 47)
 
 	<-stop
 	cancel()
 	c.Stop()
-	if err := logger.Sync(); err != nil {
-		logger.Error("Error syncing all logs", zap.Error(err))
+	if err := config.Logger.Sync(); err != nil {
+		config.Logger.Error("Error syncing all logs", zap.Error(err))
 	}
 
-	logger.Info("Cron Application stopped")
+	config.Logger.Info("Cron Application stopped")
 }
 
-func initializeMongoDB(ctx context.Context, logger *zap.Logger) {
+func initializeMongoDB(ctx context.Context) {
 	_, err := config.GetMongoConnection(ctx)
 	if err != nil {
-		logger.Fatal("error connecting to mongodb", zap.Error(err))
-		_ = logger.Sync()
+		config.Logger.Fatal("error connecting to mongodb", zap.Error(err))
+		_ = config.Logger.Sync()
 		os.Exit(1)
 	}
 
 	err = config.CheckMongoConnection()
 
 	if err != nil {
-		logger.Fatal("error connecting to mongodb", zap.Error(err))
-		_ = logger.Sync()
+		config.Logger.Fatal("error connecting to mongodb", zap.Error(err))
+		_ = config.Logger.Sync()
 		os.Exit(1)
 	}
 
 }
-
-func initializeLogger() *zap.Logger {
-	logger, err := config.GetLogger()
+func initializeLoggers() {
+	err := config.CreateLoggers()
 	if err != nil {
-		logger.Fatal("error initializing logger", zap.Error(err))
-		_ = logger.Sync()
+		config.Logger.Fatal("error initializing logger", zap.Error(err))
+		_ = config.Logger.Sync()
 		os.Exit(1)
 	}
-	return logger
 }

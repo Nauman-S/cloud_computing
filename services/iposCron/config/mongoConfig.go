@@ -17,7 +17,7 @@ type MongoConnection struct {
 }
 
 func initMongoConnection(ctx context.Context) error {
-	logger.Info("Connecting to Mongo DB")
+	Logger.Info("Connecting to Mongo DB")
 	client, err := mongo.Connect(ctx, options.Client().ApplyURI("mongodb+srv://adminuser:3jfe0FxS41OwumgZ@cluster0.jqvde.mongodb.net/"))
 	if err != nil {
 		return err
