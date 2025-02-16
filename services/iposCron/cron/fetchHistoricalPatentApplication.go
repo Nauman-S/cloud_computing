@@ -78,6 +78,8 @@ func fetchHistoricPatentApplication() time.Duration {
 				logger.Error(fmt.Sprintf("Failed Inserting into Mongo DB %d times for Patent Application on Date %s,Skipping to date %s", skip, dateStr, date.Format(dateFormat)), zap.Error(err))
 				delete(failedFetch, dateStr)
 			}
+		} else {
+			failedFetch[dateStr] = 1
 		}
 		return delay
 	}
