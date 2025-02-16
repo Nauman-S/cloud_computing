@@ -40,7 +40,7 @@ func fetchHistoricPatentApplication() time.Duration {
 		var urlErr *url.Error
 		if errors.As(err, &urlErr) && urlErr.Timeout() {
 			delay += delayIncrement
-			logger.Info(fmt.Sprintf("Failed Fetching Historic Patent Application Due To Timeout For Date %s, Backoff Recommended", dateStr), zap.Error(err))
+			logger.Error(fmt.Sprintf("Failed Fetching Historic Patent Application Due To Timeout For Date %s, Backoff Recommended", dateStr), zap.Error(err))
 
 		} else {
 			logger.Error(fmt.Sprintf("Failed Fetching Historic Patent Application For Date %s", dateStr), zap.Error(err))
@@ -65,7 +65,7 @@ func fetchHistoricPatentApplication() time.Duration {
 		delay = 0
 		return delay
 	}
-	
+
 	logger.Info(fmt.Sprintf("Found %d Patent Application For Date %s", designApplication.Count, dateStr))
 
 	err = storage.InsertPatents(designApplication)

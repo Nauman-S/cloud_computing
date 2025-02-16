@@ -61,7 +61,7 @@ func FetchPatentApplications(date time.Time, logger *zap.Logger) (*patent.Patent
 
 	var designApplication patent.PatentApplicationResponse
 	if err = json.Unmarshal(body, &designApplication); err != nil {
-		logger.Error("FetchDesignApplications error unmarshalling response body", zap.Error(err))
+		logger.Fatal("FetchDesignApplications error unmarshalling response body", zap.Error(err))
 	}
 
 	return &designApplication, err
