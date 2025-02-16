@@ -4,8 +4,10 @@ import (
 	"context"
 	"fmt"
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/mongo/options"
 	"go.uber.org/zap"
 	"iposCron/config"
+	"iposCron/model/applications/patent"
 )
 
 func LogMongoStats(ctx context.Context) {
@@ -26,7 +28,6 @@ func LogMongoStats(ctx context.Context) {
 			continue
 		}
 
-		var collectionCount int64
 		for _, collectionName := range collectionNames {
 			commandResult := db.RunCommand(ctx, bson.M{"collStats": collectionName})
 			var document bson.M
@@ -37,11 +38,21 @@ func LogMongoStats(ctx context.Context) {
 			}
 			logger.Info(fmt.Sprintf("Collection %s Storage size: %d bytes (%.2f MB)\n", collectionName, document["storageSize"], float64(document["storageSize"].(int32))/(1024*1024)))
 			logger.Info(fmt.Sprintf("Collection %s size: %d bytes (%.2f MB) \n", collectionName, document["size"], float64(document["size"].(int32))/(1024*1024)))
-			collectionCount, err = db.Collection(collectionName).CountDocuments(ctx, bson.D{})
-			if err != nil {
-				logger.Error(fmt.Sprintf("Error getting collection Count for collection %s, database %s", collectionName, database.Name), zap.Error(err))
+
+			if collectionName == COLLECTION_IPOS_PATENT {
+				var collectionCount int64
+				collection := db.Collection(collectionName)
+				collectionCount, err = collection.CountDocuments(ctx, bson.D{})
+				var earliestPatent patent.Application
+				err = collection.FindOne(ctx, bson.D{}, options.FindOne().SetSort(bson.D{{"lodgementDate", 1}})).Decode(&earliestPatent)
+				if err != nil {
+					logger.Error(fmt.Sprintf("Error getting earliest patent for collection %s, database %s", collectionName, database.Name), zap.Error(err))
+				} else {
+					logger.Info(fmt.Sprintf("Earliest Patent Date: %s", earliestPatent.LodgementDate))
+				}
+				logger.Info(fmt.Sprintf("Collection %s Collection Count: %d", collectionName, collectionCount))
 			}
-			logger.Info(fmt.Sprintf("Collection %s Collection Count: %d", collectionName, collectionCount))
 		}
+		return
 	}
 }

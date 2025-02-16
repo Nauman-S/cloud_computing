@@ -42,6 +42,7 @@ func FetchPatentApplications(date time.Time, logger *zap.Logger) (*patent.Patent
 	var resp *http.Response
 	if resp, err = client.Do(req); err != nil {
 		logger.Error("FetchPatentApplications error making request", zap.Error(err))
+		return nil, err
 	}
 	defer resp.Body.Close()
 
@@ -56,7 +57,7 @@ func FetchPatentApplications(date time.Time, logger *zap.Logger) (*patent.Patent
 		logger.Error("FetchDesignApplications error", zap.Any("Body", string(body)))
 		return nil, fmt.Errorf(string(body))
 	}
-	logger.Info("FetchPatentApplications response", zap.Any("Body", string(body)))
+	logger.Debug("FetchPatentApplications response", zap.Any("Body", string(body)))
 
 	var designApplication patent.PatentApplicationResponse
 	if err = json.Unmarshal(body, &designApplication); err != nil {

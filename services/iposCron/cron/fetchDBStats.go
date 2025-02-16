@@ -8,9 +8,10 @@ import (
 )
 
 func DBStatsCron(parentCtx context.Context) *ScheduledCron {
-	return CreateScheduledCron(30*time.Second, parentCtx, func() { fetchDBStats(parentCtx) }, "MongoDB stats", config.LoggerDBStats)
+	return CreateScheduledCron(2*time.Minute, parentCtx, func() time.Duration { return fetchDBStats(parentCtx) }, "MongoDB stats", config.LoggerDBStats)
 }
 
-func fetchDBStats(ctx context.Context) {
+func fetchDBStats(ctx context.Context) time.Duration {
 	storage.LogMongoStats(ctx)
+	return 0
 }

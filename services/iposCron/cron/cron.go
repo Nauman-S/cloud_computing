@@ -9,7 +9,7 @@ import (
 )
 
 type ScheduledCron struct {
-	executable func()
+	executable func() time.Duration
 	frequency  time.Duration
 	stopped    atomic.Bool
 	ctx        context.Context
@@ -17,9 +17,10 @@ type ScheduledCron struct {
 	name       string
 	wg         sync.WaitGroup
 	logger     *zap.Logger
+	delay      time.Duration
 }
 
-func CreateScheduledCron(frequency time.Duration, parentCtx context.Context, executable func(), name string, logger *zap.Logger) *ScheduledCron {
+func CreateScheduledCron(frequency time.Duration, parentCtx context.Context, executable func() time.Duration, name string, logger *zap.Logger) *ScheduledCron {
 	logger.Info("Created Cron", zap.String("name", name))
 	ctx, cancel := context.WithCancel(parentCtx)
 	return &ScheduledCron{
@@ -29,6 +30,7 @@ func CreateScheduledCron(frequency time.Duration, parentCtx context.Context, exe
 		name:       name,
 		logger:     logger,
 		frequency:  frequency,
+		delay:      0,
 	}
 }
 
@@ -48,7 +50,9 @@ func (s *ScheduledCron) scheduleNextRun(currentRun time.Time) time.Time {
 		} else {
 			currentRun = currentRun.Add(24 * time.Hour)
 		}
-
+	}
+	if s.delay > 0 && currentRun.Sub(now) < s.delay {
+		currentRun = currentRun.Add(s.delay - currentRun.Sub(now))
 	}
 	return currentRun
 }
@@ -69,7 +73,7 @@ func (s *ScheduledCron) Start(hour, minute int) {
 				return
 			case <-timer.C:
 				s.logger.Info("Executing job", zap.String("name", s.name))
-				s.executable()
+				s.delay = s.executable()
 
 			}
 			nextRun = s.scheduleNextRun(nextRun)
