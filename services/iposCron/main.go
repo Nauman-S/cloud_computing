@@ -25,7 +25,7 @@ func main() {
 	c := cron.DailyPatentCron(ctx)
 	c.Start(00, 30)
 
-	historicStartDate := "2019-12-22"
+	historicStartDate := "2019-12-05"
 	hc, err := cron.HistoricalPatentCron(ctx, historicStartDate)
 	if err != nil {
 		config.Logger.Fatal("Error running Historic Cron", zap.Error(err))

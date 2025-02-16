@@ -13,7 +13,7 @@ type Application struct {
 	GrantAndRenewal                   GrantAndRenewal                    `json:"grantAndRenewal" bson:"grantAndRenewal"`
 	Rupka                             []Rupka                            `json:"rupka" bson:"rupka"`
 	Documents                         []Document                         `json:"documents" bson:"documents"`
-	License                           string                             `json:"license" bson:"license"`
+	Licenses                          []License                          `json:"license" bson:"license"`
 	AgentCorrespondenceDetails        []AgentCorrespondenceDetail        `json:"agentCorrespondenceDetails" bson:"agentCorrespondenceDetails"`
 	CurrentApplicantProprietorDetails []CurrentApplicantProprietorDetail `json:"currentApplicantProprietorDetails" bson:"currentApplicantProprietorDetails"`
 	ApplicationNum                    string                             `json:"applicationNum" bson:"applicationNum"`
