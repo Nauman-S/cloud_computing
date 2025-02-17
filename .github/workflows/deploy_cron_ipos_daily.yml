@@ -7,9 +7,8 @@ on:
 
 env:
   AWS_REGION: ap-southeast-1
-  ECR_REPOSITORY: nauman/ipos
+  ECR_REPOSITORY: nauman/ipos_historic
   ECS_CLUSTER: ipos_cluster_1
-  CONTAINER_NAME: ipos-historic
   IMAGE_TAG: latest
 
 jobs:
@@ -39,7 +38,7 @@ jobs:
           IMAGE_TAG: ${{ github.sha }}
         run: |
           docker build -f ./services/iposCron/Dockerfile -t $ECR_REGISTRY/$ECR_REPOSITORY/$CONTAINER_NAME:$IMAGE_TAG .
-          docker push $ECR_REGISTRY/$ECR_REPOSITORY/$CONTAINER_NAME:$IMAGE_TAG
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
           echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
 #      - name: Fill in the new image ID in the Amazon ECS task definition
 #        id: task-def
