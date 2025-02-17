@@ -1,0 +1,5 @@
+mailgun:
+  from: 'CS5224 <mailgun@mail.naumansajid.com>'
+  domain: 'mail.naumansajid.com'
+  api:
+    key: '2ee074701ad222f61ac9c27e93540529-d8df908e-a1c6b1aa'
