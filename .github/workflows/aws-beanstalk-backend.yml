@@ -1,9 +1,6 @@
 name: AWS EBS Spring Backend
 
 on:
-  push:
-    branches:
-      - deploy/backend
   pull_request:
     types: [closed]
     branches:
