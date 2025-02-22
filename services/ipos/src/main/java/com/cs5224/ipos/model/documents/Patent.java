@@ -5,6 +5,8 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
+import java.util.List;
+
 @Data
 @Document
 public class Patent {
@@ -16,4 +18,7 @@ public class Patent {
 
     @Field("applicationNum")
     String applicationNum;
+
+    @Field("documents")
+    List<com.cs5224.ipos.model.documents.Document> documentList;
 }
