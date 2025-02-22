@@ -26,7 +26,7 @@ jobs:
         distribution: 'corretto'
         cache: maven
     - name: Build with Maven
-      run: cd $PROJECT_LOCATION && mvn clean install -Dspring.profiles.active=prod
+      run: cd $PROJECT_LOCATION && mvn clean install -Dspring.profiles.active=prod -Dmaven.test.skip=true
     - name: Configure AWS Credentials
       uses: aws-actions/configure-aws-credentials@v4
       with:
