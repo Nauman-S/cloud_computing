@@ -35,7 +35,7 @@ jobs:
         aws-secret-access-key: ${{ secrets.BEANSTALK_AWS_SECRET_KEY }}
     - name: Deploy
       run: |
-        cd $PROJECT_LOCATION/target && aws s3 cp $JAR_NAME s3://elasticbeanstalk-ap-southeast-1-${{ secrets.BEANSTALK_AWS_ACCOUNT_ID }}/artifact/spring-app/ || exit 1
-        aws elasticbeanstalk create-application-version --application-name $ELASTIC_BEANSTALK_NAME --version-label ${{github.run_id}} --description ${{github.run_id}} --source-bundle S3Bucket="elasticbeanstalk-ap-southeast-1-${{ secrets.BEANSTALK_AWS_ACCOUNT_ID }}",S3Key="artifact/spring-app/${{github.run_id}}" || exit 1
+        cd $PROJECT_LOCATION/target && aws s3 cp $JAR_NAME s3://elasticbeanstalk-ap-southeast-1-961341514752/artifact/spring-app/ || exit 1
+        aws elasticbeanstalk create-application-version --application-name $ELASTIC_BEANSTALK_NAME --version-label ${{github.run_id}} --description ${{github.run_id}} --source-bundle S3Bucket="elasticbeanstalk-ap-southeast-1-961341514752",S3Key="artifact/spring-app/${{github.run_id}}" || exit 1
         aws elasticbeanstalk update-environment --application-name $ELASTIC_BEANSTALK_NAME --environment-name $ELASTIC_BEANSTALK_ENV_NAME --version-label ${{github.run_id}} || exit 1
   
