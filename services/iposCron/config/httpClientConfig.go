@@ -2,11 +2,21 @@ package config
 
 import (
 	"net/http"
+	"sync"
 	"time"
 )
 
+var (
+	designClient *http.Client
+	once         sync.Once
+	timeout      = 10 * time.Second
+)
+
 func GetDesignClient() *http.Client {
-	return &http.Client{
-		Timeout: 10 * time.Second,
-	}
+	once.Do(func() {
+		designClient = &http.Client{
+			Timeout: timeout,
+		}
+	})
+	return designClient
 }

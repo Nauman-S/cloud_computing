@@ -1,0 +1,9 @@
+server:
+  port: 5000 #Elastic bean stalk opens port 80 and redirect to 5000 using nginx by default
+
+logging:
+  dir: /var/app/current/logs #/var/app/current is the directory the beanstalk gives the webapp user access to
+  level:
+    org:
+      springframework:
+        security: INFO #DEBUG

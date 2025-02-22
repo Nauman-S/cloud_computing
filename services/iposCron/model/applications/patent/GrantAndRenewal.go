@@ -6,7 +6,7 @@ type GrantAndRenewal struct {
 	DateOfGrantOfUKEUPatentNum                        string `json:"dateOfGrantOfUKEUPatentNum" bson:"dateOfGrantOfUKEUPatentNum"`
 	DateOfLastRenewal                                 string `json:"dateOfLastRenewal" bson:"dateOfLastRenewal"`
 	DateOfRenewal                                     string `json:"dateOfRenewal" bson:"dateOfRenewal"`
-	YearOfLastRenewal                                 string `json:"yearOfLastRenewal" bson:"yearOfLastRenewal"`
+	YearOfLastRenewal                                 int    `json:"yearOfLastRenewal" bson:"yearOfLastRenewal"`
 	GrantDate                                         string `json:"grantDate" bson:"grantDate"`
 	DateOfIssueOfCertificateOfRegistrationInSingapore string `json:"dateOfIssueOfCertificateOfRegistrationInSingapore" bson:"dateOfIssueOfCertificateOfRegistrationInSingapore"`
 	NextRenewalDate                                   string `json:"nextRenewalDate" bson:"nextRenewalDate"`
