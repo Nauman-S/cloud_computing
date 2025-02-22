@@ -1,0 +1,13 @@
+caffeine:
+  maxWeight: 100
+
+rateLimiter:
+  bandwidth: 20
+
+logging:
+  filename: ipos.log
+  dir: ./
+  level:
+    org:
+      springframework:
+        security: TRACE
