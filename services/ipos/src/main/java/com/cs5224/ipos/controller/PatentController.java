@@ -1,6 +1,6 @@
 package com.cs5224.ipos.controller;
 
-import com.cs5224.ipos.dao.PatentRepository;
+import com.cs5224.ipos.dao.patent.PatentRepository;
 import com.cs5224.ipos.model.documents.Patent;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
