@@ -26,7 +26,10 @@ public class GroupByService {
                 break;
             case "applicantName":
                 aggregation = getCountByArrayField("applicant", "name");
-
+                break;
+            case "country":
+                aggregation = getCountByArrayField("applicant","countryOfIncorporationOrResidence.description");
+                break;
         }
         if (aggregation != null) {
             AggregationResults<DistinctStatusCount>  result = mongoIposTemplate.aggregate(aggregation, PATENT_COLLECTION, DistinctStatusCount.class);
