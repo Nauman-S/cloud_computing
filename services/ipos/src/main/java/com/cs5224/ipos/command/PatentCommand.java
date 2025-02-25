@@ -22,9 +22,9 @@ public class PatentCommand {
     @Autowired
     GroupByService groupByService;
 
-    public ResponseEntity<?> execute(String applicationNumber, String groupBy, String aggregate) {
+    public ResponseEntity<?> execute(String applicationNumber, String groupByField, String aggregate) {
 
-        if (groupBy == null || aggregate == null) {
+        if (groupByField == null || aggregate == null) {
             List<Patent>  patentList = patentRepository.findByApplicationNum(applicationNumber);
 
             if (patentList.size() > 0 ) {
@@ -34,10 +34,12 @@ public class PatentCommand {
             }
             return ResponseEntity.ok(patentList.get(0));
         } else {
-            if (groupBy.equals("status") && aggregate.equals("count")) {
-                AggregationResults<DistinctStatusCount> aggregationResults = groupByService.getCountDistinctApplicationStatus();
-                List<DistinctStatusCount> list = aggregationResults.getMappedResults();
-                return ResponseEntity.ok(list);
+            if (aggregate.equals("count")) {
+                AggregationResults<DistinctStatusCount> aggregationResults = groupByService.getCount(groupByField);
+                if (aggregationResults != null) {
+                    List<DistinctStatusCount> list = aggregationResults.getMappedResults();
+                    return ResponseEntity.ok(list);
+                }
             }
         }
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
