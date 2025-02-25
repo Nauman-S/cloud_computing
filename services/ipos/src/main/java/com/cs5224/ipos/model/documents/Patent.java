@@ -19,6 +19,9 @@ public class Patent {
     @Field("applicationNum")
     String applicationNum;
 
+    @Field("summary")
+    String ApplicationSummary;
+
     @Field("documents")
     List<com.cs5224.ipos.model.documents.Document> documentList;
 }
