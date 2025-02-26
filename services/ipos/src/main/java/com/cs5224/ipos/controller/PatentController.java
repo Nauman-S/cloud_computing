@@ -1,5 +1,6 @@
 package com.cs5224.ipos.controller;
 
+import com.cs5224.ipos.command.PatentAggregationCommand;
 import com.cs5224.ipos.command.PatentCommand;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,13 +16,19 @@ public class PatentController {
     @Autowired
     PatentCommand patentCommand;
 
+    @Autowired
+    PatentAggregationCommand patentAggregationCommand;
+
+    @GetMapping
+    public ResponseEntity<?> patentTemplateQuery(@RequestParam(required=false) String groupBy,
+                                                   @RequestParam(required = false) String aggregate) {
+        return patentAggregationCommand.execute(groupBy,aggregate);
+    }
     @GetMapping("/{applicationNumber}")
-    public ResponseEntity<?> patent(
+    public ResponseEntity<?> patentQuery(
             @PathVariable String applicationNumber,
-            @RequestParam(required=false) String groupBy,
-            @RequestParam(required = false) String aggregate,
             Authentication authObject) {
 
-        return patentCommand.execute(applicationNumber, groupBy, aggregate);
+        return patentCommand.execute(applicationNumber);
     }
 }
