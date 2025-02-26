@@ -17,7 +17,6 @@ public class GroupByService {
         this.mongoIposTemplate = mongoTemplate;
     }
     public AggregationResults<DistinctStatusCount> getCount(String fieldName) {
-        MatchOperation matchOperation = Aggregation.match(Criteria.where(fieldName).exists(true));
         Aggregation aggregation = null;
         switch (fieldName) {
             case "status":
@@ -32,6 +31,8 @@ public class GroupByService {
             case "year":
                 aggregation = getCountByYear("summary.filingDate");
                 break;
+            case "ipc":
+                aggregation = getCodeCounts();
 
         }
         if (aggregation != null) {
@@ -42,6 +43,24 @@ public class GroupByService {
         }
 
         return null;
+    }
+
+    public Aggregation getCodeCounts() {
+        ProjectionOperation projectionOperation = Aggregation
+                .project()
+                .andExpression("split(ifNull(summary.ipc, ''),'; ')")
+                .as("codes");
+        UnwindOperation unwindOperation = Aggregation.unwind("codes");
+        MatchOperation matchOperation = Aggregation.match(Criteria.where("codes").ne(""));
+        GroupOperation groupOperation = Aggregation.group("codes").count().as("count");
+
+        Aggregation aggregation = Aggregation.newAggregation(
+                projectionOperation,
+                unwindOperation,
+                matchOperation,
+                groupOperation
+        );
+        return aggregation;
     }
 
     public Aggregation getBasicCount(String aggField) {
