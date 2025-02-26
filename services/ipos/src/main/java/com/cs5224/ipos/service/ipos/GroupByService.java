@@ -1,7 +1,6 @@
 package com.cs5224.ipos.service.ipos;
 
 import com.cs5224.ipos.domain.DistinctStatusCount;
-import org.bson.Document;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.aggregation.*;
@@ -30,6 +29,10 @@ public class GroupByService {
             case "country":
                 aggregation = getCountByArrayField("applicant","countryOfIncorporationOrResidence.description");
                 break;
+            case "year":
+                aggregation = getCountByYear("summary.filingDate");
+                break;
+
         }
         if (aggregation != null) {
             AggregationResults<DistinctStatusCount>  result = mongoIposTemplate.aggregate(aggregation, PATENT_COLLECTION, DistinctStatusCount.class);
@@ -51,5 +54,17 @@ public class GroupByService {
         UnwindOperation unwind = Aggregation.unwind(arrayField);
         GroupOperation group = Aggregation.group(arrayField + "." + groupByField).count().as("count");
         return Aggregation.newAggregation(unwind, group);
+    }
+
+    public Aggregation getCountByYear(String dateField) {
+        MatchOperation matchValidDates = Aggregation.match(
+                Criteria.where(dateField).regex("^\\d{4}-\\d{2}-\\d{2}$")
+        );
+
+        ProjectionOperation projectionOperation = Aggregation.project()
+                .andExpression("year(dateFromString($" + dateField + "))").as("year");
+        GroupOperation groupByField = Aggregation.group("year").count().as("count");
+
+        return Aggregation.newAggregation(matchValidDates, projectionOperation, groupByField);
     }
 }
