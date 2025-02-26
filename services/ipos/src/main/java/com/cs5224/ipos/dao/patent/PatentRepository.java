@@ -1,4 +1,4 @@
-package com.cs5224.ipos.dao;
+package com.cs5224.ipos.dao.patent;
 
 import com.cs5224.ipos.model.documents.Patent;
 import org.springframework.data.mongodb.repository.MongoRepository;

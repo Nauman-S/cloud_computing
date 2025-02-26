@@ -55,7 +55,7 @@ public class TestersSecretAuthenticationFilter extends OncePerRequestFilter {
         log.info("Testing Request Success: {} ", authentication.getPrincipal());
         var context = SecurityContextHolder.createEmptyContext();
         context.setAuthentication(token);
-        SecurityContextHolder.setContext(context);
+        SecurityContextHolder.getContextHolderStrategy().setContext(context);
 //        scr.saveContext(context, request, response);
 
         filterChain.doFilter(request, response);
