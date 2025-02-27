@@ -10,6 +10,7 @@ import (
 
 var createdLogger atomic.Bool
 
+var logLevel zapcore.Level
 var Logger *zap.Logger
 var LoggerHistoricPatent *zap.Logger
 var LoggerDailyPatent *zap.Logger
@@ -35,48 +36,33 @@ func getZapEncoderConfig() zapcore.EncoderConfig {
 
 }
 
-func CreateLoggers() error {
+func CreateLogger(name string) (err error) {
 	if createdLogger.CompareAndSwap(false, true) {
-		var err error
-		LoggerHistoricPatent, err = createLogger("historicPatent")
+		config := zap.Config{
+			Level:       zap.NewAtomicLevelAt(logLevel),
+			Development: false,
+			Sampling: &zap.SamplingConfig{
+				Initial:    100,
+				Thereafter: 100,
+			},
+			Encoding:         "json",
+			EncoderConfig:    getZapEncoderConfig(),
+			OutputPaths:      []string{"stdout"},
+			ErrorOutputPaths: []string{"stderr"},
+		}
+
+		Logger, err = config.Build()
 		if err != nil {
 			return err
 		}
-		LoggerDailyPatent, err = createLogger("dailyPatent")
-		if err != nil {
-			return err
-		}
-		LoggerDBStats, err = createLogger("db")
-		if err != nil {
-			return err
-		}
-		Logger, err = createLogger("app")
-		if err != nil {
-			return err
-		}
-		Logger.Info("Logger created")
-		return nil
 	}
 	return nil
 }
 
-func createLogger(name string) (*zap.Logger, error) {
-	config := zap.Config{
-		Level:       zap.NewAtomicLevelAt(zap.InfoLevel),
-		Development: false,
-		Sampling: &zap.SamplingConfig{
-			Initial:    100,
-			Thereafter: 100,
-		},
-		Encoding:         "json",
-		EncoderConfig:    getZapEncoderConfig(),
-		OutputPaths:      []string{fmt.Sprintf("logs/%v.log", name)},
-		ErrorOutputPaths: []string{"stderr"},
+func SetLogLevel(level int) error {
+	logLevel = zapcore.Level(level)
+	if logLevel == zapcore.InvalidLevel {
+		return fmt.Errorf("invalid log level: %v:\n -1 Debug\n 0 Info\n 1 Warn\n 2 Error", level)
 	}
-
-	loggerInstance, err := config.Build()
-	if err != nil {
-		return nil, err
-	}
-	return loggerInstance, nil
+	return nil
 }
