@@ -9,9 +9,9 @@ COPY . ./
 
 RUN make install
 
-ENTRYPOINT ["sleep", "3600"]
-
 FROM debian:bookworm-slim
+
+RUN apt-get update && apt-get install -y ca-certificates && update-ca-certificates
 
 COPY --from=BUILDER /root/go/bin/ipos /usr/bin/ipos
 

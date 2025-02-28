@@ -7,7 +7,7 @@ BIN_NAME := ipos
 
 .PHONY: run
 run:
-	docker run -d --name ipos ipos:latest
+	@docker run -d --network host --name ipos ipos:latest
 
 
 .PHONY: $(BUILD_DIR)
@@ -29,10 +29,10 @@ install: build
 
 .PHONY: build-docker
 build-docker:
-	docker build -t ipos -f ./Dockerfile .
+	@docker build -t ipos -f ./Dockerfile .
 
 .PHONY: stop
 stop:
-	docker rm -f ipos
+	@docker rm -f ipos
 
 
