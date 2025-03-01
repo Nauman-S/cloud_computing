@@ -48,7 +48,7 @@ func (s *ScheduledCron) scheduleNextRun(currentRun time.Time) time.Time {
 		if s.frequency > 0 {
 			currentRun = currentRun.Add(s.frequency)
 		} else {
-			currentRun = currentRun.Add(24 * time.Hour)
+			currentRun = currentRun.Add(1 * time.Minute)
 		}
 	}
 	if s.delay > 0 && currentRun.Sub(now) < s.delay {
