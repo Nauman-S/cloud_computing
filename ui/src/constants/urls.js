@@ -1,7 +1,6 @@
 const BASE_URL = `${process.env.REACT_APP_API_INGRESS_PROTOCOL}://${process.env.REACT_APP_API_INGRESS_HOST}:${process.env.REACT_APP_API_INGRESS_PORT}`;
-// const PATENT_DATA_BASE_URL =
-//   "http://cs5224.ap-southeast-1.elasticbeanstalk.com:80/service/patent";
-const PATENT_DATA_BASE_URL = "/service/patent";
+const PATENT_DATA_BASE_URL = "http://cs5224.ap-southeast-1.elasticbeanstalk.com:80/service/patent";
+// const PATENT_DATA_BASE_URL = "/service/patent";
 
 const URLs = {
   LOGIN: `${BASE_URL}/service/user/login`,
