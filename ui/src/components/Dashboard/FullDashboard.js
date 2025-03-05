@@ -5,7 +5,7 @@ import PatentsDashboard from "./PatentsDashboard";
 const DashboardTabs = () => {
   const [activeTab, setActiveTab] = useState(0);
 
-  const handleChange = (event, newValue) => {
+  const handleChange = (_, newValue) => {
     setActiveTab(newValue);
   };
 
