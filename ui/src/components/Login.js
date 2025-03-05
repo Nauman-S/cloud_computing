@@ -6,7 +6,7 @@ const Login = ({ showLogin, setShowLogin }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState({});
-  const [isSignUp, setIsSignUp] = useState(false);
+  // const [isSignUp, setIsSignUp] = useState(false);
 
   const validateForm = () => {
     let formErrors = {};

@@ -23,6 +23,9 @@
     "recharts": "^2.15.1",
     "web-vitals": "^4.2.4"
   },
+  "devDependencies": {
+    "@babel/plugin-proposal-private-property-in-object": "^7.14.5"
+  },
   "scripts": {
     "start": "react-scripts start",
     "start:prod": "env-cmd -f .env.prod react-scripts start",
