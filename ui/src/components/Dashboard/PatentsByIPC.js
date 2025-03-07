@@ -46,11 +46,8 @@ const PatentIPCChart = ({ startDate, endDate }) => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const query = `&startDate=${
-        startDate.toISOString().split("T")[0]
-      }&endDate=${endDate.toISOString().split("T")[0]}`;
       try {
-        const response = await axios.get(URLs.PATENT_BY_IPC + query, {
+        const response = await axios.get(URLs.PATENT_BY_IPC, {
           headers: { "X-TESTER-REQUEST": "tester_secret_api_key" },
         });
         if (response.data) {
