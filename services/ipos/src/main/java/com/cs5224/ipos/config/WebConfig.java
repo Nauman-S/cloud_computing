@@ -21,6 +21,6 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**") // Apply to all endpoints
-                .allowedOrigins("https://brave-desert-074ebc30f.4.azurestaticapps.net");
+                .allowedOrigins("https://brave-desert-074ebc30f.4.azurestaticapps.net","http://localhost:3000");
     }
 }
