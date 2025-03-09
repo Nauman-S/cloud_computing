@@ -1,6 +1,7 @@
 package com.cs5224.ipos.ai.api;
 
 import com.cs5224.ipos.ai.VoyagerAiConstants;
+import com.cs5224.ipos.ai.context.VoyagerTokenContext;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
@@ -65,12 +66,16 @@ public class VoyagerAiApi {
         Assert.notNull(embeddingRequest.input(), "The input can not be null.");
         Assert.isTrue(embeddingRequest.input() instanceof String, "The input must be a String");
 
-        return this.restClient.post().uri(embeddingsPath)
+        ResponseEntity<EmbeddingList<Embedding>> result =  this.restClient.post().uri(embeddingsPath)
                 .body(embeddingRequest)
                 .retrieve()
                 .toEntity(new ParameterizedTypeReference<>() {
 
                 });
+
+        VoyagerTokenContext.setTokenCount(result.getBody().usage.totalTokens());
+
+        return result;
     }
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
