@@ -4,6 +4,12 @@ caffeine:
 rateLimiter:
   bandwidth: 20
 
+spring:
+  ai:
+    voyager:
+      api-key: "pa-yUOVox6UfNrtdGoJKJCVEUa4DN3gvkIRirwEoXwwR5m"
+      model: "voyage-3"
+
 logging:
   filename: ipos.log
   dir: ./
