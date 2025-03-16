@@ -8,6 +8,8 @@ const URLs = {
   HEALTHZ: `${BASE_URL}/service/user/id`,
   LOGOUT: `${BASE_URL}/service/user/logout`,
 
+  SEARCH: `${BASE_URL}/service/`,
+
   // Patent Data APIs (Using PATENT_BASE_URL)
   PATENT_BY_STATUS: `${PATENT_DATA_BASE_URL}?groupBy=status&aggregate=count`,
   PATENT_BY_APPLICANT: `${PATENT_DATA_BASE_URL}?groupBy=applicantName&aggregate=count`,

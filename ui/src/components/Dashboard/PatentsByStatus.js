@@ -14,8 +14,8 @@ import URLs from "../../constants/urls";
 const PatentStatusChart = () => {
   const [data, setData] = useState([]);
 
-  useEffect(() => {
-    const fetchData = async () => {
+  useEffect(
+    () => async () => {
       try {
         const response = await axios.get(URLs.PATENT_BY_STATUS, {
           headers: { "X-TESTER-REQUEST": "tester_secret_api_key" },
@@ -34,10 +34,9 @@ const PatentStatusChart = () => {
       } catch (error) {
         console.error("Error fetching patent data:", error);
       }
-    };
-
-    fetchData();
-  });
+    },
+    []
+  );
 
   return (
     <div>

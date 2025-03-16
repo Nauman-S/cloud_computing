@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Tabs, Tab, Box, Typography } from "@mui/material";
 import PatentsDashboard from "./PatentsDashboard";
 
-const DashboardTabs = () => {
+const FullDashboard = () => {
   const [activeTab, setActiveTab] = useState(0);
 
   const handleChange = (_, newValue) => {
@@ -44,4 +44,4 @@ const DashboardTabs = () => {
   );
 };
 
-export default DashboardTabs;
+export default FullDashboard;

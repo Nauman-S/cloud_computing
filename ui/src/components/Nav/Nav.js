@@ -2,7 +2,6 @@ import { useState } from "react";
 import { Menu, X } from "lucide-react";
 import { Link } from "react-router-dom";
 import Login from "../Login";
-import FullDashboard from "../Dashboard/FullDashboard";
 
 const Nav = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -60,6 +59,15 @@ const Nav = () => {
                 </Link>
               </li>
               <li className="nav-item">
+                <Link
+                  to="/analytics"
+                  className="nav-link"
+                  onClick={() => setShowDashboard(true)}
+                >
+                  Analytics
+                </Link>
+              </li>
+              <li className="nav-item">
                 <button
                   className="btn btn-primary"
                   onClick={() => {
@@ -70,21 +78,11 @@ const Nav = () => {
                   Login
                 </button>
               </li>
-              <li className="nav-item">
-                <Link
-                  to="/analytics"
-                  className="nav-link"
-                  onClick={() => setShowDashboard(true)}
-                >
-                  Analytics
-                </Link>
-              </li>
             </ul>
           </div>
         </div>
         <Login showLogin={showLogin} setShowLogin={setShowLogin} />
       </nav>
-      {showDashboard && <FullDashboard />}
     </>
   );
 };
