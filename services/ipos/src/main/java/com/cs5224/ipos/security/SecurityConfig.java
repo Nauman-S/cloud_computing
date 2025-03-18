@@ -12,9 +12,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.event.AuthenticationSuccessEvent;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.intercept.AuthorizationFilter;
 
@@ -22,7 +20,6 @@ import static com.cs5224.ipos.security.Constants.ALL_ACCESS_AUTHORITY;
 
 @Slf4j
 @Configuration
-@EnableWebSecurity
 public class SecurityConfig {
 
     @Value("${security.disable}")
@@ -34,6 +31,7 @@ public class SecurityConfig {
             if (disableSecurity) {
                 requestComingIn.requestMatchers("/**").permitAll();
             } else {
+                requestComingIn.requestMatchers("/chat/stream/**").permitAll();
                 requestComingIn.requestMatchers("/**").hasAuthority(ALL_ACCESS_AUTHORITY);
                 requestComingIn.anyRequest().authenticated();
             }

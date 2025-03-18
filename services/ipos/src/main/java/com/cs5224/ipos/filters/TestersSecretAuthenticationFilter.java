@@ -33,7 +33,7 @@ public class TestersSecretAuthenticationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 
-        if (isNotATestersRequest(request)) {
+        if (isNotATestersRequest(request) && !isReactiveEndpoint(request)) {
             filterChain.doFilter(request, response);
             return;
         }
@@ -59,6 +59,10 @@ public class TestersSecretAuthenticationFilter extends OncePerRequestFilter {
 //        scr.saveContext(context, request, response);
 
         filterChain.doFilter(request, response);
+    }
+
+    private boolean isReactiveEndpoint(HttpServletRequest request) {
+        return request.getRequestURI().contains("/chat/stream");
     }
 
     private boolean isNotATestersRequest(HttpServletRequest request) {
