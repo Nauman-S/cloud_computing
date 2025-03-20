@@ -37,7 +37,7 @@ const PatentStatusChart = () => {
     };
 
     fetchData();
-  });
+  }, []);
 
   return (
     <div>
