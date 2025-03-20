@@ -140,16 +140,16 @@
 				<artifactId>maven-resources-plugin</artifactId>
 				<executions>
 					<execution>
-						<id>copy-resources</id>
+						<id>copy-platform-resources</id>
 						<phase>prepare-package</phase>
 						<goals>
 							<goal>copy-resources</goal>
 						</goals>
 						<configuration>
-							<outputDirectory>${project.build.directory}/.ebextensions</outputDirectory>
+							<outputDirectory>${project.build.directory}/classes/.platform</outputDirectory>
 							<resources>
 								<resource>
-									<directory>src/main/resources/ebextensions</directory>
+									<directory>.platform</directory>
 									<filtering>true</filtering>
 								</resource>
 							</resources>
