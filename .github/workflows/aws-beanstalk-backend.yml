@@ -38,6 +38,6 @@ jobs:
     - name: Deploy
       run: |
         cd $PROJECT_LOCATION && aws s3 cp $ZIP_NAME s3://elasticbeanstalk-ap-southeast-1-961341514752/artifact/spring-app/ || exit 1
-        aws elasticbeanstalk create-application-version --application-name $ELASTIC_BEANSTALK_NAME --version-label ${{github.run_id}} --description ${{github.run_id}} --source-bundle S3Bucket="elasticbeanstalk-ap-southeast-1-961341514752",S3Key="artifact/spring-app/$JAR_NAME" || exit 1
+        aws elasticbeanstalk create-application-version --application-name $ELASTIC_BEANSTALK_NAME --version-label ${{github.run_id}} --description ${{github.run_id}} --source-bundle S3Bucket="elasticbeanstalk-ap-southeast-1-961341514752",S3Key="artifact/spring-app/$ZIP_NAME" || exit 1
         aws elasticbeanstalk update-environment --application-name $ELASTIC_BEANSTALK_NAME --environment-name $ELASTIC_BEANSTALK_ENV_NAME --version-label ${{github.run_id}} || exit 1
   
