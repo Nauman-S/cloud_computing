@@ -28,7 +28,8 @@ jobs:
     - name: Zip target and .platform directories
       run: |
         cd $PROJECT_LOCATION
-        zip -r $ZIP_NAME target/$JAR_NAME .platform/ || exit 1
+        mv target/$JAR_NAME $JAR_NAME
+        zip -r $ZIP_NAME $JAR_NAME ./.platform || exit 1
     - name: Configure AWS Credentials
       uses: aws-actions/configure-aws-credentials@v4
       with:
