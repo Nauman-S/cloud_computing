@@ -4,6 +4,15 @@ caffeine:
 rateLimiter:
   bandwidth: 20
 
+spring:
+  ai:
+    voyager:
+      api-key: "pa-yUOVox6UfNrtdGoJKJCVEUa4DN3gvkIRirwEoXwwR5m"
+      model: "voyage-3"
+    vector-store:
+      mongodb:
+        path-name: "embedding"
+
 logging:
   filename: ipos.log
   dir: ./
