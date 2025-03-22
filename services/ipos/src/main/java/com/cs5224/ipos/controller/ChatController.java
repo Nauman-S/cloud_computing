@@ -2,6 +2,7 @@ package com.cs5224.ipos.controller;
 
 import com.cs5224.ipos.command.ChatCommand;
 import com.cs5224.ipos.command.MockCommand;
+import com.cs5224.ipos.command.RagCommand;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.codec.ServerSentEvent;
@@ -19,11 +20,18 @@ public class ChatController {
     MockCommand mockCommand;
 
     @Autowired
+    RagCommand ragCommand;
+    @Autowired
     ChatCommand chatCommand;
 
     @GetMapping()
     public ResponseEntity<?> handleUserQuery(@RequestParam String query) {
         return chatCommand.execute(query);
+    }
+
+    @GetMapping("/stream")
+    public Flux<ServerSentEvent<String>> handleRagRequest(@RequestParam String query) {
+        return ragCommand.execute(query);
     }
 
     @GetMapping("/stream/mock")

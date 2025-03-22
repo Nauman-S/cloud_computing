@@ -12,6 +12,10 @@ spring:
     vector-store:
       mongodb:
         path-name: "embedding"
+    open-router:
+      api-key: "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"
+      url: "https://openrouter.ai"
+      chat-completions: "/api/v1/chat/completions"
 
 logging:
   filename: ipos.log
