@@ -79,6 +79,15 @@ const Nav = () => {
                   Analytics
                 </Link>
               </li>
+              <li className="nav-item">
+                <Link
+                  to="/chat"
+                  className="nav-link"
+                  onClick={handleLinkClick}
+                >
+                  Chat
+                </Link>
+              </li>
             </ul>
           </div>
         </div>
