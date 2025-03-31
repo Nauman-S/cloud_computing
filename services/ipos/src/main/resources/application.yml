@@ -1,3 +1,4 @@
+#There's no DEV profile, this is basically the dev profile, prod profile overrides the required config
 caffeine:
   maxWeight: 100
 
@@ -16,6 +17,19 @@ spring:
       api-key: "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"
       url: "https://openrouter.ai"
       chat-completions: "/api/v1/chat/completions"
+
+  security:
+    oauth2:
+      client:
+        registration:
+          github:
+            client-id: Ov23limRtEf8mTb5Gb3v
+            client-secret: f2ee8b8514afa79bf19ce15176ebe0cba1bb1304
+            scope: read:user,user:email
+          google:
+            client-id: 716834381473-g97nsl91b7kmt94lgcgulheaclkbtuut.apps.googleusercontent.com
+            client-secret: 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
+            scope: email,profile
 
 logging:
   filename: ipos.log
