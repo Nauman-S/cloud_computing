@@ -103,6 +103,7 @@ public class SecurityConfig {
             var auth = evt.getAuthentication();
             log.info("Auth Success [%s]", auth.getName());
         };
+
     }
 
 
