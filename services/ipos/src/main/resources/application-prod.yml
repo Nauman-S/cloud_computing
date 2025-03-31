@@ -7,3 +7,12 @@ logging:
     org:
       springframework:
         security: INFO #DEBUG
+spring:
+  security:
+    oauth2:
+      client:
+        registration:
+          github:
+            client-id: Ov23lisJE4TPh82zuAj6
+            client-secret: 3d4068c8c5439a819647f4d4c9c0717f0a7109ca
+            scope: read:user,user:email
