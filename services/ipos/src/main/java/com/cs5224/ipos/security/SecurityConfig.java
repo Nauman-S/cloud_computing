@@ -66,7 +66,7 @@ public class SecurityConfig {
                 })))
                 .oauth2Login(
                         oauth2 -> oauth2
-                                .authorizationEndpoint(configurer -> configurer.baseUri("/oauth2/authorization"))
+                                .authorizationEndpoint(configurer -> configurer.baseUri("https://ipos.naumansajid.com/service/oauth2/authorization"))
                                 .redirectionEndpoint(configurer -> configurer.baseUri("https://ipos.naumansajid.com/service/login/oauth2/code/*"))
                                 .successHandler(((request, response, authentication) -> {
                                     log.info("\n\n\n\nRedirection must be DONE!!!!! {}\n\n\n\n", request.getSession().getAttribute(REDIRECT_URI));
