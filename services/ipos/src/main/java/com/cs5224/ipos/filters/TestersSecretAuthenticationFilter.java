@@ -37,7 +37,7 @@ public class TestersSecretAuthenticationFilter extends OncePerRequestFilter {
             filterChain.doFilter(request, response);
             return;
         }
-        log.info("Testing Request from IP: {}",request.getRemoteAddr());
+        log.info("Testing Request from IP: {}, Host: {}",request.getRemoteAddr(), request.getRemoteHost());
 
         final String API_ACCESS_KEY = extractApiKeyFromRequest(request);
         List<GrantedAuthority> authoritiesForTester = List.of(new AllAccessAuthority());
