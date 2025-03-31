@@ -74,6 +74,7 @@ public class SecurityConfig {
                                         cookieCsrfTokenRepository.saveToken(csrfToken, request, response);
                                         response.sendRedirect(request.getSession().getAttribute(REDIRECT_URI).toString());
                                         request.getSession().setAttribute(CSRF, csrfToken.getToken());
+                                        log.info("\n\n\n\nRedirecting to {}\n\n\n\n", request.getSession().getAttribute(REDIRECT_URI));
                                     } else {
                                         response.sendRedirect("https://brave-desert-074ebc30f.4.azurestaticapps.net");
                                     }
