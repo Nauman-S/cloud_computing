@@ -50,6 +50,7 @@ public class SecurityConfig {
 
                     } else {
                         requestComingIn.requestMatchers("/user/**").permitAll();
+                        requestComingIn.requestMatchers("/oauth2/authorization/**").permitAll();
                         requestComingIn.requestMatchers("/chat/stream/**").permitAll();
                         requestComingIn.requestMatchers("/**").hasAuthority(ALL_ACCESS_AUTHORITY);
                         requestComingIn.anyRequest().authenticated();
