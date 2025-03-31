@@ -6,7 +6,7 @@ logging:
   level:
     org:
       springframework:
-        security: INFO #DEBUG
+        security: TRACE #INFO, DEBUG
 spring:
   security:
     oauth2:
