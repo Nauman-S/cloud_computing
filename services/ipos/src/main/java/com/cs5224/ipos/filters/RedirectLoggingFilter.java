@@ -43,10 +43,10 @@ public class RedirectLoggingFilter extends GenericFilterBean {
         // Log the response - use your logging logic here
         String responseBody = new String(responseWrapper.getContentAsByteArray());
 
-        if (req.getRequestURI().matches(".*/oauth2/authorization/github.*")) {
-            LOGGER.info("Request Body {}",  requestBody);
-            LOGGER.info("Response Body {}", responseBody);
-        }
+
+        LOGGER.info("Request Body {}",  requestBody);
+        LOGGER.info("Response Body {}", responseBody);
+
         // Make sure to copy the content back to the original HttpServletResponse after logging it
         responseWrapper.copyBodyToResponse();
     }
