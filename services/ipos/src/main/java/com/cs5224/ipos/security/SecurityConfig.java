@@ -68,6 +68,7 @@ public class SecurityConfig {
                                 .authorizationEndpoint(configurer -> configurer.baseUri("/oauth2/authorization"))
                                 .redirectionEndpoint(configurer -> configurer.baseUri("/login/oauth2/code/*"))
                                 .successHandler(((request, response, authentication) -> {
+                                    log.info("\n\n\n\nRedirection must be DONE!!!!! {}\n\n\n\n", request.getSession().getAttribute(REDIRECT_URI));
                                     response.setStatus(HttpStatus.FOUND.value());
                                     if (!Objects.isNull(request.getSession()) && !Objects.isNull(request.getSession().getAttribute(REDIRECT_URI))) {
                                         CsrfToken csrfToken = cookieCsrfTokenRepository.generateToken(request);
