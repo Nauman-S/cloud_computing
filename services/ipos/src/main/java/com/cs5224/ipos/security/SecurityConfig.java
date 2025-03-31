@@ -2,6 +2,7 @@ package com.cs5224.ipos.security;
 //MOVE RATELIMITER BEFORE AUTHNETICATIONPROVIDER
 //
 
+import com.cs5224.ipos.filters.RedirectLoggingFilter;
 import com.cs5224.ipos.filters.TestersSecretAuthenticationFilter;
 import com.cs5224.ipos.security.authProviders.TesterAuthenticationProvider;
 import com.cs5224.ipos.service.user.CustomOAuth2UserService;
@@ -82,6 +83,8 @@ public class SecurityConfig {
                                 }))
                 )
                 .addFilterBefore(new TestersSecretAuthenticationFilter(authenticationManager), AuthorizationFilter.class)
+                .addFilterBefore(new RedirectLoggingFilter(), TestersSecretAuthenticationFilter.class)
+
                 .authenticationManager(authenticationManager)
                 .build();
     }
