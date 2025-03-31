@@ -1,5 +1,7 @@
 package com.cs5224.ipos.filters;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.GenericFilterBean;
 import jakarta.servlet.*;
@@ -12,6 +14,7 @@ import java.io.IOException;
 
 @Component
 public class RedirectLoggingFilter extends GenericFilterBean {
+    private static final Logger LOGGER = LoggerFactory.getLogger(RedirectLoggingFilter.class);
 
     @Override
     public void doFilter(
@@ -41,8 +44,8 @@ public class RedirectLoggingFilter extends GenericFilterBean {
         String responseBody = new String(responseWrapper.getContentAsByteArray());
 
         if (req.getRequestURI().matches(".*/oauth2/authorization/github.*")) {
-            logger.info("Request Body: " + requestBody);
-            logger.info("Response Body: " + responseBody);
+            LOGGER.info("Request Body {}",  requestBody);
+            LOGGER.info("Response Body {}", responseBody);
         }
         // Make sure to copy the content back to the original HttpServletResponse after logging it
         responseWrapper.copyBodyToResponse();
