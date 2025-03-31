@@ -5,13 +5,11 @@ package com.cs5224.ipos.security;
 import com.cs5224.ipos.filters.TestersSecretAuthenticationFilter;
 import com.cs5224.ipos.security.authProviders.TesterAuthenticationProvider;
 import com.cs5224.ipos.service.user.CustomOAuth2UserService;
-import jakarta.servlet.http.Cookie;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
@@ -76,9 +74,8 @@ public class SecurityConfig {
                                         cookieCsrfTokenRepository.saveToken(csrfToken, request, response);
                                         response.sendRedirect(request.getSession().getAttribute(REDIRECT_URI).toString());
                                         request.getSession().setAttribute(CSRF, csrfToken.getToken());
-                                        System.out.println(csrfToken.getHeaderName());
                                     } else {
-                                        response.sendRedirect("https://brave-desert-074ebc30f.4.azurestaticapps.net/status");
+                                        response.sendRedirect("https://brave-desert-074ebc30f.4.azurestaticapps.net");
                                     }
                                 }))
                 )
