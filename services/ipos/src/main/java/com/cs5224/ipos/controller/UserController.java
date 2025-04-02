@@ -30,7 +30,7 @@ public class UserController {
     Logger logger = LoggerFactory.getLogger(UserController.class);
 
 
-    private List<String> allowedRedirectDomains = Arrays.asList("http://localhost:3000/status","https://localhost:3000", "http://127.0.0.1:3000/status", "https://brave-desert-074ebc30f.4.azurestaticapps.net/status", "https://frontend.ipos.naumansajid.com/status");
+    private List<String> allowedRedirectDomains = Arrays.asList("http://localhost:3000/status","https://localhost:3000/status", "http://127.0.0.1:3000/status", "https://brave-desert-074ebc30f.4.azurestaticapps.net/status", "https://frontend.ipos.naumansajid.com/status");
 
     @GetMapping("/info")
     public Map<String, Object> userInfo(HttpServletRequest request) {
