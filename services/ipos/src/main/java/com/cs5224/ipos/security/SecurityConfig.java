@@ -31,7 +31,6 @@ import java.util.Arrays;
 import java.util.Objects;
 
 import static com.cs5224.ipos.constants.constant.CSRF;
-import static com.cs5224.ipos.constants.constant.REDIRECT_URI;
 import static com.cs5224.ipos.security.Constants.ALL_ACCESS_AUTHORITY;
 
 @Slf4j
@@ -40,6 +39,9 @@ public class SecurityConfig {
 
     @Value("${security.disable}")
     private boolean disableSecurity;
+
+    @Value("${auth.redirect}")
+    private String redirectUri;
 
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity security, AuthenticationManager authenticationManager) throws Exception {
@@ -69,14 +71,13 @@ public class SecurityConfig {
                                 .authorizationEndpoint(configurer -> configurer.baseUri("/oauth2/authorization"))
                                 .redirectionEndpoint(configurer -> configurer.baseUri("/login/oauth2/code/*"))
                                 .successHandler(((request, response, authentication) -> {
-                                    log.info("\n\n\n\nRedirection must be DONE!!!!! {}\n\n\n\n", request.getSession().getAttribute(REDIRECT_URI));
                                     response.setStatus(HttpStatus.FOUND.value());
-                                    if (!Objects.isNull(request.getSession()) && !Objects.isNull(request.getSession().getAttribute(REDIRECT_URI))) {
+                                    if (!Objects.isNull(request.getSession())) {
                                         CsrfToken csrfToken = cookieCsrfTokenRepository.generateToken(request);
                                         cookieCsrfTokenRepository.saveToken(csrfToken, request, response);
-                                        response.sendRedirect(request.getSession().getAttribute(REDIRECT_URI).toString());
                                         request.getSession().setAttribute(CSRF, csrfToken.getToken());
-                                        log.info("\n\n\n\nRedirecting to {}\n\n\n\n", request.getSession().getAttribute(REDIRECT_URI));
+                                        response.sendRedirect(redirectUri);
+                                        log.info("\nRedirecting to {}\n", request.getSession().getAttribute(redirectUri));
                                     } else {
                                         response.sendRedirect("https://brave-desert-074ebc30f.4.azurestaticapps.net");
                                     }
@@ -121,6 +122,7 @@ public class SecurityConfig {
         config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(Arrays.asList("*"));
         config.setAllowCredentials(true);
+        config.addExposedHeader("Set-Cookie"); //Allows Cookie Headers in CORS requests
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", config);
