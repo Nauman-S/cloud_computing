@@ -5,6 +5,8 @@ server:
     protocol-header: x-forwarded-proto
     protocol-header-https-value: https
 
+auth:
+  redirect: "https://frontend.ipos.naumansajid.com/status"
 
 logging:
   dir: /var/app/current/logs #/var/app/current is the directory the beanstalk gives the webapp user access to
@@ -21,3 +23,7 @@ spring:
             client-id: Ov23lisJE4TPh82zuAj6
             client-secret: 3d4068c8c5439a819647f4d4c9c0717f0a7109ca
             scope: read:user,user:email
+          google:
+            client-id: 509576134964-7cgd8r9v65p08kqtghlcckaei9blajs9.apps.googleusercontent.com
+            client-secret: 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
+            scope: email,profile

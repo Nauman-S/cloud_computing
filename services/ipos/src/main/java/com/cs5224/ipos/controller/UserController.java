@@ -75,12 +75,7 @@ public class UserController {
         if ((httpSession = request.getSession(true)) != null) {
             if (!Objects.isNull(redirectRequest) && determineSafeRedirect(redirectRequest.getRedirectUrl())) {
                 httpSession.setAttribute(REDIRECT_URI, redirectRequest.getRedirectUrl());
-                ResponseCookie responseCookie = ResponseCookie.from(REDIRECT_URI, redirectRequest.getRedirectUrl()).
-                        httpOnly(true)
-                        .path("/")
-                        .build();
-                logger.info("Set up redirect success: Session :{},  Cookie: {}", httpSession, responseCookie);
-                httpServletResponse.addHeader(HttpHeaders.SET_COOKIE, responseCookie.toString());
+                logger.info("Set up redirect success: Session :{}", httpSession);
                 return new ResponseEntity<>(HttpStatus.OK);
             } else {
                 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
