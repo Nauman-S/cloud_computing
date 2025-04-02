@@ -114,6 +114,7 @@ public class SecurityConfig {
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowedOrigins(Arrays.asList(
                 "http://localhost:3000",
+                "https://localhost:3000",
                 "https://brave-desert-074ebc30f.4.azurestaticapps.net",
                 "https://frontend.ipos.naumansajid.com"
         ));
