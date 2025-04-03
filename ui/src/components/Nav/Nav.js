@@ -17,7 +17,7 @@ const Nav = () => {
     <>
       <nav className="navbar navbar-expand-md navbar-light bg-light shadow-sm p-3">
         <div className="container-fluid">
-          <h1 className="navbar-brand">Logo</h1>
+          <h1 className="navbar-brand">CS5224</h1>
           <button
             className="navbar-toggler"
             type="button"
@@ -52,11 +52,11 @@ const Nav = () => {
               </li>
               <li className="nav-item">
                 <Link
-                  to="/contact"
+                  to="/status"
                   className="nav-link"
                   onClick={handleLinkClick}
                 >
-                  Contact
+                  Status
                 </Link>
               </li>
               <li className="nav-item">

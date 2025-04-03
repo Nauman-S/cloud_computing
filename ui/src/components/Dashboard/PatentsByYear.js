@@ -10,17 +10,17 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import URLs from "../../constants/urls";
+import { prepareAxiosRequestConfig } from "../oAuth2/OAuth";
 
 const PatentYearChart = ({ startDate, endDate }) => {
   const [data, setData] = useState([]);
   const [defaultStartDate, setDefaultStartDate] = useState(null);
   const [defaultEndDate, setDefaultEndDate] = useState(null);
+  
 
   useEffect(() => {
     axios
-      .get(URLs.PATENT_BY_YEAR, {
-        headers: { "X-TESTER-REQUEST": "tester_secret_api_key" },
-      })
+      .get(URLs.PATENT_BY_YEAR, prepareAxiosRequestConfig())
       .then((response) => {
         if (response.data) {
           const sortedData = response.data
