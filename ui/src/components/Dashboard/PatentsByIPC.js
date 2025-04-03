@@ -10,6 +10,7 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import URLs from "../../constants/urls";
+import { prepareAxiosRequestConfig } from "../oAuth2/OAuth";
 
 const PatentIPCChart = ({ startDate, endDate }) => {
   const [data, setData] = useState([]);
@@ -47,9 +48,7 @@ const PatentIPCChart = ({ startDate, endDate }) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(URLs.PATENT_BY_IPC, {
-          headers: { "X-TESTER-REQUEST": "tester_secret_api_key" },
-        });
+        const response = await axios.get(URLs.PATENT_BY_IPC, prepareAxiosRequestConfig());
         if (response.data) {
           // Group and sum counts by the custom category
           const groupedData = response.data.reduce((acc, item) => {

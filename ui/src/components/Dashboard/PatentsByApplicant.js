@@ -10,6 +10,7 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import URLs from "../../constants/urls";
+import { prepareAxiosRequestConfig } from "../oAuth2/OAuth";
 
 function toTitleCase(str) {
   // Splits on whitespace/punctuation, capitalizes each word
@@ -25,9 +26,7 @@ const PatentApplicantChart = ({ topX }) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(URLs.PATENT_BY_APPLICANT, {
-          headers: { "X-TESTER-REQUEST": "tester_secret_api_key" },
-        });
+        const response = await axios.get(URLs.PATENT_BY_APPLICANT, prepareAxiosRequestConfig());
 
         if (response.data && Array.isArray(response.data)) {
           // 1) Aggregate data by lower-cased name so duplicates merge

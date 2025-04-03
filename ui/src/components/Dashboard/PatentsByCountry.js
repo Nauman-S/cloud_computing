@@ -10,6 +10,7 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import URLs from "../../constants/urls";
+import { prepareAxiosRequestConfig } from "../oAuth2/OAuth";
 
 const PatentCountryChart = ({ startDate, endDate, topX }) => {
   const [data, setData] = useState([]);
@@ -18,9 +19,7 @@ const PatentCountryChart = ({ startDate, endDate, topX }) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(URLs.PATENT_BY_COUNTRY, {
-          headers: { "X-TESTER-REQUEST": "tester_secret_api_key" },
-        });
+        const response = await axios.get(URLs.PATENT_BY_COUNTRY, prepareAxiosRequestConfig());
         if (response.data) {
           let localNoCountryCount = 0;
           const chartData = response.data.reduce((acc, item) => {
