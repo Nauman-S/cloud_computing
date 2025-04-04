@@ -45,12 +45,13 @@ const githubLogin = async () => {
 const prepareAxiosRequestConfig = () => {
     const csrfToken = localStorage.getItem("csrfToken");
     // console.log(csrfToken);
-    if (!csrfToken) {
+    let keyEnabled = false;
+    keyEnabled = process.env.REACT_APP_KEY_ENABLED;
+    if (!keyEnabled && !csrfToken) {
         console.error("CSRF token not found in local storage");
         return null;
     }
-    let keyEnabled = false;
-    keyEnabled = process.env.KEY_ENABLED;
+
     if (keyEnabled) {
         return {
             headers: { "X-TESTER-REQUEST": "tester_secret_api_key" },
