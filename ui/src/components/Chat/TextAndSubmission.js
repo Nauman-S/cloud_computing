@@ -45,7 +45,11 @@ const TextAndSubmission = () => {
             },
             signal: abortController.signal,
             onmessage: (event) => {
-              console.log("Received event:", event.data);
+              if (event.data.includes("TerminationResponse")) {
+                console.log("Termination Response:", event.data);
+                setIsStreaming(false);
+                return;
+              }
               // setMessages((prevMessages) => [...prevMessages, event.data]); // Append new messages
               agentResponse += event.data;
               setMessages(prevMessages => 

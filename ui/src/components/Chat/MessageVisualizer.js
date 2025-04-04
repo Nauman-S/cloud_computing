@@ -25,7 +25,9 @@ const MessageVisualizer = ({content, isFromAgent, isEndOfStream}) => {
                 opacity: isEndOfStream ? 1 : 0.9
               }}
             >
-              <Typography variant="body1">
+              <Typography variant="body1" sx={{
+              textAlign: "left"
+              }}>
                 {content}
                 {!isEndOfStream && isFromAgent && (
                   <Box component="span" sx={{ ml: 1, display: "inline-block" }}>
