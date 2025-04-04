@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useState, useRef} from "react";
 import { ResponsiveContainer } from "recharts";
 import { fetchEventSource } from "@microsoft/fetch-event-source";
 import { Paper, Stack } from "@mui/material";
@@ -10,6 +10,8 @@ import URLs from "../../constants/urls";
 const TextAndSubmission = () => {
     const [inputValue, setInputValue] = useState('');
     const [messages, setMessages] = useState([]);
+    const [isStreaming, setIsStreaming] = useState(false);
+    const abortControllerRef = useRef(null);  
 
     const handleSubmit = () => {
       if (inputValue.trim()) {
@@ -33,14 +35,15 @@ const TextAndSubmission = () => {
             isEndOfStream: false
           }
         ]);
-
-        
-
+        const abortController = new AbortController();
+        abortControllerRef.current = abortController; 
+        setIsStreaming(true);
           fetchEventSource(`${URLs.CHAT_MOCK_STREAM}?query=${encodeURIComponent(inputValue)}`, {
             method: "GET",
             headers: {
               "X-TESTER-REQUEST": "tester_secret_api_key",
             },
+            signal: abortController.signal,
             onmessage: (event) => {
               console.log("Received event:", event.data);
               // setMessages((prevMessages) => [...prevMessages, event.data]); // Append new messages
@@ -62,14 +65,30 @@ const TextAndSubmission = () => {
                     : msg
                 )
               );
+              setIsStreaming(false);
               console.log("Connection closed");
             },
             onerror: (error) => {
+              setIsStreaming(false);
               console.error("SSE connection error:", error);
             },
           });
     
           setInputValue("");
+        }
+      };
+      const handleStop = () => {
+        if (isStreaming && abortControllerRef.current) {
+          abortControllerRef.current.abort(); 
+          setIsStreaming(false);
+          setMessages((prevMessages) =>
+            prevMessages.map((msg) =>
+              msg.isFromAgent && !msg.isEndOfStream
+                ? { ...msg, isEndOfStream: true }
+                : msg
+            )
+          );
+          console.log("Streaming stopped by user.");
         }
       };
 return (
@@ -124,7 +143,7 @@ return (
           outline: "none",
         }}
       />
-      <button
+      {(!isStreaming && <button
         onClick={handleSubmit}
         style={{
           padding: "10px 20px",
@@ -136,7 +155,21 @@ return (
         }}
       >
         Send
-      </button>
+      </button>)}
+      {(isStreaming && 
+          <button
+            onClick={handleStop}
+            style={{
+              padding: "10px 20px",
+              backgroundColor: "red",
+              color: "#fff",
+              border: "none",
+              borderRadius: "4px",
+              cursor: "pointer",
+            }}
+          >
+            Stop
+          </button>)}
     </ResponsiveContainer>
   );
 };
