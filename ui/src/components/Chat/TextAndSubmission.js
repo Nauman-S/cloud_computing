@@ -38,7 +38,7 @@ const TextAndSubmission = () => {
         const abortController = new AbortController();
         abortControllerRef.current = abortController; 
         setIsStreaming(true);
-          fetchEventSource(`${URLs.CHAT_MOCK_STREAM}?query=${encodeURIComponent(inputValue)}`, {
+          fetchEventSource(`${URLs.CHAT_STREAM}?query=${encodeURIComponent(inputValue)}`, {
             method: "GET",
             headers: {
               "X-TESTER-REQUEST": "tester_secret_api_key",

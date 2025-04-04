@@ -30,6 +30,7 @@ const URLs = {
 
   //CHAT
   CHAT_MOCK_STREAM: `${CHAT_BASE_URL}/stream/mock`,
+  CHAT_STREAM: `${CHAT_BASE_URL}/stream`,
 };
 
 export default URLs;
