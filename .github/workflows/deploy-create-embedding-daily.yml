@@ -1,0 +1,66 @@
+name: Deploy Lambda Function
+
+on:
+  push:
+    branches:
+      - deploy/search
+  workflow_dispatch: # Allows manual triggers of this workflow
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install requests pymongo pymupdf voyageai
+
+      - name: Zip Lambda function
+        run: |
+          cd services/createEmbeddingsCron
+          zip -r ../../function.zip .
+
+      - name: Deploy to AWS Lambda
+        uses: aws-actions/aws-lambda-deploy@v1
+        with:
+          function-name: createEmbeddings # Lambda function name on AWS
+          zip-file: function.zip
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_REGION: ap-southeast-1
+
+      - name: Set up CloudWatch Events Rule
+        run: |
+          aws events put-rule --schedule-expression "cron(0 0 * * ? *)" --name DailyLambdaTrigger
+
+          # Attach Lambda as target for this event
+          aws events put-targets --rule DailyLambdaTrigger --targets "Id"="1","Arn"="arn:aws:lambda:ap-southeast-1:${{ secrets.AWS_ACCOUNT_ID }}:function:createEmbeddings"
+
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_REGION: ap-southeast-1
+
+      - name: Allow CloudWatch to trigger Lambda
+        run: |
+          # Check if the permission already exists
+          if ! aws lambda get-policy --function-name createPatentEmbeddings --region ap-southeast-1 | grep -q 'DailySchedulePermission'; then
+            aws lambda add-permission \
+              --function-name createPatentEmbeddings \
+              --statement-id DailySchedulePermission \
+              --action "lambda:InvokeFunction" \
+              --principal events.amazonaws.com \
+              --source-arn arn:aws:events:ap-southeast-1:${{ secrets.AWS_ACCOUNT_ID }}:rule/DailyLambdaTrigger \
+              --region ap-southeast-1
+          else
+            echo "Permission already exists, skipping."
+          fi
