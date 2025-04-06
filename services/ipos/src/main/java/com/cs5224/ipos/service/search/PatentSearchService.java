@@ -34,7 +34,7 @@ public class PatentSearchService {
         }
 
         if (request.getTitleOfInvention() != null && !request.getTitleOfInvention().isEmpty()) {
-            criteriaList.add(Criteria.where("summary.TitleofInvention")
+            criteriaList.add(Criteria.where("summary.TitleOfInvention")
                     .regex(request.getTitleOfInvention(), "i")); // Case-insensitive partial match
         }
 
