@@ -38,16 +38,27 @@ public class PatentSearchService {
                     .regex(request.getTitleOfInvention(), "i")); // Case-insensitive partial match
         }
 
-        if (request.getFilingDateStart() != null && request.getFilingDateEnd() != null) {
-            criteriaList.add(Criteria.where("summary.filingDate")
-                    .gte(request.getFilingDateStart())
-                    .lte(request.getFilingDateEnd()));
+        if (request.getFilingDateStart() != null ||  request.getFilingDateEnd() != null) {
+            var criteria = Criteria.where("summary.filingDate");
+            if (request.getFilingDateStart() != null) {
+                criteria.gte(request.getFilingDateStart());
+            }
+
+            if (request.getFilingDateEnd() != null) {
+                criteria.lte(request.getFilingDateEnd());
+            }
+            criteriaList.add(criteria);
         }
 
-        if (request.getLodgementDateStart() != null && request.getLodgementDateEnd() != null) {
-            criteriaList.add(Criteria.where("summary.lodgementDate")
-                    .gte(request.getLodgementDateStart())
-                    .lte(request.getLodgementDateEnd()));
+        if (request.getLodgementDateStart() != null ||  request.getLodgementDateEnd() != null) {
+            var criteria = Criteria.where("summary.lodgementDate");
+            if (request.getLodgementDateStart() != null) {
+                criteria.gte(request.getLodgementDateStart());
+            }
+            if (request.getLodgementDateEnd() != null){
+                criteria.lte(request.getLodgementDateEnd());
+            }
+            criteriaList.add(criteria);
         }
 
         // TODO: add similarity/embedding search if needed
