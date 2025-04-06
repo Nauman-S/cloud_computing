@@ -17,10 +17,4 @@ public class WebConfig implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry interceptorRegistry) {
 //        interceptorRegistry.addInterceptor(rateLimitInterceptor);
     }
-
-    @Override
-    public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/**") // Apply to all endpoints
-                .allowedOrigins("https://brave-desert-074ebc30f.4.azurestaticapps.net","http://localhost:3000");
-    }
 }
