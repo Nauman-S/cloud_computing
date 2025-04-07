@@ -52,7 +52,7 @@
       "last 1 safari version"
     ]
   },
-  "proxy": "http://cs5224.ap-southeast-1.elasticbeanstalk.com:80",
+  "proxy": "https://ipos.naumansajid.com",
   "devDependencies": {
     "html-webpack-plugin": "^5.6.3"
   }
