@@ -23,3 +23,6 @@ yarn-error.log*
 # java
 .idea
 target
+
+# vs code
+/.vscode

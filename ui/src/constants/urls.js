@@ -1,8 +1,7 @@
 const BASE_URL = `${process.env.REACT_APP_API_INGRESS_PROTOCOL}://${process.env.REACT_APP_API_INGRESS_HOST}:${process.env.REACT_APP_API_INGRESS_PORT}`;
 const BASE_SERVICE = "https://ipos.naumansajid.com/service";
 // const BASE_SERVICE = "http://localhost:8080/service"
-// const PATENT_DATA_BASE_URL = "https://ipos.naumansajid.com/service/patent";
-const PATENT_DATA_BASE_URL = "/service/patent";
+const PATENT_DATA_BASE_URL = "https://ipos.naumansajid.com/service/patent";
 // const PATENT_DATA_BASE_URL = "http://localhost:8080/service/patent";
 // const CHAT_BASE_URL = "http://localhost:8080/service/chat";
 const CHAT_BASE_URL = "https://ipos.naumansajid.com/service/chat";
