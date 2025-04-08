@@ -2,7 +2,8 @@ package com.cs5224.ipos.controller;
 
 import com.cs5224.ipos.command.PatentAggregationCommand;
 import com.cs5224.ipos.command.PatentCommand;
-import com.cs5224.ipos.command.PatentSearchCommand; 
+import com.cs5224.ipos.command.PatentSearchCommand;
+import com.cs5224.ipos.dto.EmbeddingSearchRequest;
 import com.cs5224.ipos.dto.PatentSearchRequest; 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,9 +58,22 @@ public class PatentController {
         searchRequest.setFilingDateEnd(filingDateEnd);
         searchRequest.setLodgementDateStart(lodgementDateStart);
         searchRequest.setLodgementDateEnd(lodgementDateEnd);
-        // titleEmbedding and documentEmbedding can be set here if needed in the future
 
         return patentSearchCommand.execute(searchRequest);
     }
+
+    @GetMapping("/search/embedding")
+    public ResponseEntity<?> searchByTitleEmbedding(
+        @RequestParam String queryText,
+        @RequestParam(required = false, defaultValue = "0.8") Double similarityThreshold, 
+        @ReuestParam(required = false, defaultValue="10") Integer k) {
+
+    EmbeddingSearchRequest request = new EmbeddingSearchRequest();
+    request.setQueryText(queryText);
+    request.setSimilarityThreshold(similarityThreshold);
+    request.setK(k);
+    return patentSearchCommand.executeEmbeddingSearch(request);
+}
+
 
 }

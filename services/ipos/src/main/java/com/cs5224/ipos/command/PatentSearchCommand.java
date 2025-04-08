@@ -1,5 +1,6 @@
 package com.cs5224.ipos.command;
 
+import com.cs5224.ipos.dto.EmbeddingSearchRequest;
 import com.cs5224.ipos.dto.PatentSearchRequest;
 import com.cs5224.ipos.model.documents.Patent;
 import com.cs5224.ipos.service.search.*;
@@ -22,4 +23,13 @@ public class PatentSearchCommand {
         }
         return ResponseEntity.ok(results);
     }
+
+    public ResponseEntity<?> executeEmbeddingSearch(EmbeddingSearchRequest request) {
+    List<Patent> results = patentSearchService.searchByTitleKeyword(request);
+    if (results == null || results.isEmpty()) {
+        return ResponseEntity.notFound().build();
+    }
+    return ResponseEntity.ok(results);
+}
+
 }
