@@ -18,7 +18,10 @@ const PatentStatusChart = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(URLs.PATENT_BY_STATUS, prepareAxiosRequestConfig());
+        const response = await axios.get(
+          URLs.PATENT_BY_STATUS,
+          prepareAxiosRequestConfig()
+        );
 
         if (response.data) {
           const chartData = response.data

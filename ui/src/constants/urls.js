@@ -6,7 +6,6 @@ const PATENT_DATA_BASE_URL = "https://ipos.naumansajid.com/service/patent";
 // const CHAT_BASE_URL = "http://localhost:8080/service/chat";
 const CHAT_BASE_URL = "https://ipos.naumansajid.com/service/chat";
 
-
 const URLs = {
   LOGIN: `${BASE_URL}/service/user/login`,
   SIGNUP: `${BASE_URL}/service/user/signup`,
@@ -31,6 +30,9 @@ const URLs = {
   //CHAT
   CHAT_MOCK_STREAM: `${CHAT_BASE_URL}/stream/mock`,
   CHAT_STREAM: `${CHAT_BASE_URL}/stream`,
+
+  //SEARCH
+  SEARCH: `${PATENT_DATA_BASE_URL}/search`,
 };
 
 export default URLs;
