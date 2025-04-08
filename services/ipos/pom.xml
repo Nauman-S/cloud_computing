@@ -90,7 +90,6 @@
 			<groupId>org.springframework.ai</groupId>
 			<artifactId>spring-ai-mongodb-atlas-store</artifactId>
 		</dependency>
-
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
@@ -107,6 +106,11 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>dev.langchain4j</groupId>
+			<artifactId>langchain4j-voyage-ai</artifactId>
+			<version>1.0.0-beta2</version>
 		</dependency>
 <!--		<dependency>-->
 <!--			<groupId>org.springframework.security</groupId>-->
