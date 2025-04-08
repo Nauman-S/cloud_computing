@@ -66,7 +66,7 @@ public class PatentController {
     public ResponseEntity<?> searchByTitleEmbedding(
         @RequestParam String queryText,
         @RequestParam(required = false, defaultValue = "0.8") Double similarityThreshold, 
-        @ReuestParam(required = false, defaultValue="10") Integer k) {
+        @RequestParam(required = false, defaultValue="10") Integer k) {
 
     EmbeddingSearchRequest request = new EmbeddingSearchRequest();
     request.setQueryText(queryText);
