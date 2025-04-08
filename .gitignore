@@ -15,6 +15,7 @@
 
 # misc
 .DS_Store
+ui/eval "$(ssh-agent -s)"*
 
 npm-debug.log*
 yarn-debug.log*
