@@ -3,20 +3,46 @@ import "./App.css";
 import SignUp from "./components/Signup/Signup";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Nav from "./components/Nav/Nav";
+import Status from "./components/oAuth2/Status";
+import Chat from "./components/Chat/Chat";
 import FullDashboard from "./components/Dashboard/FullDashboard";
-import SearchComponent from "./components/Search/Search";
+import { AuthProvider } from "./services/AuthProvider";
+import { ErrorProvider } from "./services/ErrorProvider";
+import ProtectedRoute from "./components/ProtectedRoute";
+import ErrorBanner from "./components/elements/ErrorBanner";
 function App() {
   return (
-    <BrowserRouter>
-      <Nav></Nav>
-      <div className="App">
-        <Routes>
-          <Route path="/signup" element={<SignUp />} />
-          <Route path="/analytics" element={<FullDashboard/>} />
-          <Route path="/services" element={<SearchComponent/>}/>
-        </Routes>
-      </div>
-    </BrowserRouter>
+    <ErrorProvider>
+      <AuthProvider>
+        <BrowserRouter>
+          <Nav></Nav>
+          <div className="App">
+            <ErrorBanner />
+            <Routes>
+              <Route path="/signup" element={<SignUp />} />
+              <Route path="/status" element={<Status />} />
+
+              <Route
+                path="/chat"
+                element={
+                  <ProtectedRoute>
+                    <Chat />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/analytics"
+                element={
+                  <ProtectedRoute>
+                    <FullDashboard />
+                  </ProtectedRoute>
+                }
+              />
+            </Routes>
+          </div>
+        </BrowserRouter>
+      </AuthProvider>
+    </ErrorProvider>
   );
 }
 

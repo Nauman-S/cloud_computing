@@ -10,6 +10,7 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import URLs from "../../constants/urls";
+import { prepareAxiosRequestConfig } from "../oAuth2/OAuth";
 
 const PatentStatusChart = () => {
   const [data, setData] = useState([]);
@@ -17,9 +18,7 @@ const PatentStatusChart = () => {
   useEffect(
     () => async () => {
       try {
-        const response = await axios.get(URLs.PATENT_BY_STATUS, {
-          headers: { "X-TESTER-REQUEST": "tester_secret_api_key" },
-        });
+        const response = await axios.get(URLs.PATENT_BY_STATUS, prepareAxiosRequestConfig());
 
         if (response.data) {
           const chartData = response.data
@@ -34,9 +33,10 @@ const PatentStatusChart = () => {
       } catch (error) {
         console.error("Error fetching patent data:", error);
       }
-    },
-    []
-  );
+    };
+
+    fetchData();
+  }, []);
 
   return (
     <div>
