@@ -12,6 +12,12 @@ public class Document {
     @Field("lodgementDate")
     String lodgementDate;
 
+    @Field("url")
+    String url; 
+
+    @Field("docType")
+    DocType docType; 
+
     @Data
     public static class DocType {
         @Field("description")

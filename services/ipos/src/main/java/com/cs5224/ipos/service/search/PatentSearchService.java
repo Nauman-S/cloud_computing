@@ -29,8 +29,12 @@ public class PatentSearchService {
             criteriaList.add(Criteria.where("summary.applicationNum").is(request.getApplicationNum()));
         }
 
-        if (request.getApplicationType() != null && !request.getApplicationType().isEmpty()) {
-            criteriaList.add(Criteria.where("summary.applicationType").is(request.getApplicationType()));
+        // if (request.getApplicationType() != null && !request.getApplicationType().isEmpty()) {
+        //     criteriaList.add(Criteria.where("summary.applicationType").is(request.getApplicationType()));
+        // }
+
+        if (request.getApplicationStatus() != null && !request.getApplicationStatus().isEmpty()) {
+            criteriaList.add(Criteria.where("summary.applicationStatus").is(request.getApplicationStatus()));
         }
 
         if (request.getTitleOfInvention() != null && !request.getTitleOfInvention().isEmpty()) {

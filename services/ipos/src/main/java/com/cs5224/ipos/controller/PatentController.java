@@ -40,7 +40,8 @@ public class PatentController {
     @GetMapping("/search")
     public ResponseEntity<?> searchPatents(
             @RequestParam(required = false) String applicationNum,
-            @RequestParam(required = false) String applicationType,
+            // @RequestParam(required = false) String applicationType,
+            @RequestParam(required = false) String applicationStatus,
             @RequestParam(required = false) String titleOfInvention,
             @RequestParam(required = false) String filingDateStart,
             @RequestParam(required = false) String filingDateEnd,
@@ -49,7 +50,8 @@ public class PatentController {
     ) {
         PatentSearchRequest searchRequest = new PatentSearchRequest();
         searchRequest.setApplicationNum(applicationNum);
-        searchRequest.setApplicationType(applicationType);
+        // searchRequest.setApplicationType(applicationType);
+        searchRequest.setApplicationStatus(applicationStatus);
         searchRequest.setTitleOfInvention(titleOfInvention);
         searchRequest.setFilingDateStart(filingDateStart);
         searchRequest.setFilingDateEnd(filingDateEnd);
