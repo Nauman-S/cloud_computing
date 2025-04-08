@@ -5,7 +5,8 @@ import lombok.Data;
 @Data
 public class PatentSearchRequest {
     private String applicationNum;      //application number - exact match
-    private String applicationType;     //application type - exact match
+    // private String applicationType;     //application type - exact match
+    private String applicationStatus;   //application status - dropdown selection
     private String titleOfInvention;    //title of invention - partial match
     private String filingDateStart;     //filing date start range (inclusive)
     private String filingDateEnd;       //filing date end range (inclusive)
