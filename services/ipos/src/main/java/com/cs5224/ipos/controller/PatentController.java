@@ -62,7 +62,7 @@ public class PatentController {
         return patentSearchCommand.execute(searchRequest);
     }
 
-    @GetMapping("/search/embedding")
+    @GetMapping("/vectorSearch")
     public ResponseEntity<?> searchByTitleEmbedding(
         @RequestParam String queryText,
         @RequestParam(required = false, defaultValue = "0.8") Double similarityThreshold, 
