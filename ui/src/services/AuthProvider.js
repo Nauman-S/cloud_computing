@@ -1,4 +1,4 @@
-import React, { createContext, useState, useEffect, useContext } from "react";
+import { createContext, useState, useEffect, useContext } from "react";
 import axios from "axios";
 import URLs from "../constants/urls";
 import generateToken from "../utils/generateToken";
@@ -14,7 +14,6 @@ export const AuthProvider = ({ children }) => {
     axios
       .get(URLs.OAUTH_USERINFO, { withCredentials: true })
       .then((res) => {
-        console.log("AuthProvider", res);
         if (res.data?.authenticated && res.data["X-CSRF"]) {
           localStorage.setItem("csrfToken", generateToken(res.data["X-CSRF"]));
         } else {

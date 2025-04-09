@@ -20,8 +20,8 @@ const Nav = () => {
         </Link>
       </li>
       <li className="nav-item">
-        <Link to="/about" className="nav-link">
-          About
+        <Link to="/explorer" className="nav-link">
+          Explore
         </Link>
       </li>
       <li className="nav-item">
@@ -51,7 +51,10 @@ const Nav = () => {
         >
           Logout
         </button>
-        <LogoutPopup show={showLogoutModal} handleClose={() => setShowLogoutModal(false)} />
+        <LogoutPopup
+          show={showLogoutModal}
+          handleClose={() => setShowLogoutModal(false)}
+        />
       </li>
     </ul>
   );
@@ -88,7 +91,7 @@ const Nav = () => {
             {isOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
           <div className={`collapse navbar-collapse ${isOpen ? "show" : ""}`}>
-            {userInfo?.authenticated? loggedInTabs: loggedOutTabs}
+            {userInfo?.authenticated || true ? loggedInTabs : loggedOutTabs}
           </div>
         </div>
       </nav>
