@@ -2,8 +2,12 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import URLs from "../../constants/urls";
 import ResultsCards from "./ResultsCards";
+import FormField from "../elements/FormField";
+import { useError } from "../../services/ErrorProvider";
+import Loading from "../elements/Loading";
 
 export default function SearchComponent() {
+  const { showError, clearError } = useError();
   const fields = [
     { name: "applicationNum", label: "Application Number", type: "text" },
     {
@@ -29,10 +33,16 @@ export default function SearchComponent() {
       ],
     },
     { name: "titleOfInvention", label: "Title Of Invention", type: "text" },
-    { name: "filingDateStart", label: "Filing Date Start", type: "date" },
-    { name: "filingDateEnd", label: "Filing Date End", type: "date" },
-    { name: "lodgementDateStart", label: "Lodgement Date Start", type: "date" },
-    { name: "lodgementDateEnd", label: "Lodgement Date End", type: "date" },
+    {
+      name: "filingDate",
+      label: "Filing Date Range",
+      type: "date-range",
+    },
+    {
+      name: "lodgementDate",
+      label: "Lodgement Date Range",
+      type: "date-range",
+    },
   ];
 
   const initialFormData = fields.reduce(
@@ -42,7 +52,7 @@ export default function SearchComponent() {
 
   const [formData, setFormData] = useState(initialFormData);
   const [searchResults, setSearchResults] = useState([]);
-  const [error, setError] = useState("");
+  // const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
   const [currentPage, setCurrentPage] = useState(1);
@@ -70,98 +80,72 @@ export default function SearchComponent() {
   const handleClear = () => {
     setFormData(initialFormData);
     setSearchResults([]);
-    setError("");
+    clearError();
+    // setError("");
   };
 
   const handleSearch = async () => {
-    // const hasAnyValue = Object.values(formData).some(
-    //   (value) => value.trim() !== ""
-    // );
+    clearError();
+    const hasAnyValue = Object.values(formData).some(
+      (value) => value.trim() !== ""
+    );
 
-    // if (!hasAnyValue) {
-    //   setError("At least 1 field must be filled out");
-    //   return;
-    // }
+    if (!hasAnyValue) {
+      showError("At least 1 field must be filled out");
+      return;
+    }
 
-    setError("");
+    // setError("");
     setLoading(true);
 
-    try {
-      const queryParams = {};
-      if (formData.applicationNum)
-        queryParams.applicationNum = formData.applicationNum;
-      // if (formData.applicationType)
-      //   queryParams.applicationType = formData.applicationType;
-      if (formData.applicationStatus)
-        queryParams.applicationStatus = formData.applicationStatus;
-      if (formData.titleOfInvention)
-        queryParams.titleOfInvention = formData.titleOfInvention;
-      if (formData.filingDateStart)
-        queryParams.filingDateStart = formData.filingDateStart;
-      if (formData.filingDateEnd)
-        queryParams.filingDateEnd = formData.filingDateEnd;
-      if (formData.lodgementDateStart)
-        queryParams.lodgementDateStart = formData.lodgementDateStart;
-      if (formData.lodgementDateEnd)
-        queryParams.lodgementDateEnd = formData.lodgementDateEnd;
+    const queryParams = Object.entries(formData)
+      .filter(([_, value]) => value)
+      .reduce((acc, [key, value]) => {
+        acc[key] = value;
+        return acc;
+      }, {});
 
-      const response = await axios.get(URLs.SEARCH, {
+    axios
+      .get(URLs.SEARCH, {
         params: queryParams,
         headers: {
           "X-TESTER-REQUEST": "tester_secret_api_key",
         },
         withCredentials: true,
-      });
-      setSearchResults(response.data || []);
-    } catch (error) {
-      console.error("Error fetching search results:", error);
-      // If the error is 404, clear any previous search results and do not set an error
-      if (error.response && error.response.status === 404) {
+      })
+      .then((response) => setSearchResults(response.data ?? []))
+      .catch((error) => {
+        const errorMessage =
+          error?.response?.status === 404
+            ? "Failed to fetch search results"
+            : "System unable to process the request. Please try again later!";
+        showError(errorMessage);
         setSearchResults([]);
-      } else {
-        setError("Failed to fetch search results");
-        setSearchResults([]); // Also clear any previous results for other errors
-      }
-    } finally {
-      setLoading(false); // Stop loading no matter what.
-    }
+      })
+      .finally(() => setLoading(false));
   };
 
   return (
     <>
       <div className="container mt-4 p-4 border rounded shadow-sm w-75">
-        {fields.map(({ name, label, type, options }) => (
-          <div key={name} className="mb-3 row">
-            <label className="col-sm-3 col-form-label">{label}</label>
-            <div className="col-sm-9">
-              {type === "select" ? (
-                <select
-                  name={name}
-                  value={formData[name]}
-                  onChange={handleChange}
-                  className="form-control form-control-lg"
-                >
-                  {options.map(({ value, label }) => (
-                    <option key={value} value={value}>
-                      {label}
-                    </option>
-                  ))}
-                </select>
-              ) : (
-                <input
-                  type={type}
-                  name={name}
-                  placeholder={`Enter ${label}`}
-                  value={formData[name]}
-                  onChange={handleChange}
-                  className="form-control form-control-lg"
-                />
-              )}
-            </div>
-          </div>
+        {fields.map((field) => (
+          <FormField
+            key={field.name}
+            id={field.name}
+            name={field.name}
+            label={field.label}
+            type={field.type}
+            value={formData[`${field.name}Start`] || formData[field.name] || ""}
+            valueEnd={formData[`${field.name}End`] || ""}
+            onChange={handleChange}
+            onChangeEnd={handleChange}
+            placeholder={field.label}
+            // error={errors[field.name]}
+            options={field.options}
+          />
         ))}
 
-        {error && <div className="text-danger mb-2">{error}</div>}
+        {/* {error && <div className="text-danger mb-2">{error}</div>} */}
         <div className="d-flex justify-content-between">
           <button className="btn btn-secondary" onClick={handleClear}>
             Clear
@@ -172,16 +156,7 @@ export default function SearchComponent() {
         </div>
       </div>
 
-      {loading && (
-        <div className="text-center my-3">
-          <span
-            className="spinner-border"
-            role="status"
-            aria-hidden="true"
-          ></span>
-          <span className="ms-2">Searching results...</span>
-        </div>
-      )}
+      {loading && <Loading message="Searching results..." />}
 
       {searchResults.length > 0 ? (
         <>

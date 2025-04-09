@@ -1,5 +1,5 @@
 const BASE_URL = `${process.env.REACT_APP_API_INGRESS_PROTOCOL}://${process.env.REACT_APP_API_INGRESS_HOST}:${process.env.REACT_APP_API_INGRESS_PORT}`;
-const BASE_SERVICE = "https://ipos.naumansajid.com/service"
+const BASE_SERVICE = "https://ipos.naumansajid.com/service";
 // const BASE_SERVICE = "http://localhost:8080/service"
 const PATENT_DATA_BASE_URL = "https://ipos.naumansajid.com/service/patent";
 // const PATENT_DATA_BASE_URL = "http://localhost:8080/service/patent";
@@ -13,6 +13,7 @@ const URLs = {
   LOGOUT: `${BASE_URL}/service/user/logout`,
 
   // Patent Data APIs (Using PATENT_BASE_URL)
+  PATENT_SEARCH: `${PATENT_DATA_BASE_URL}/search`,
   PATENT_BY_STATUS: `${PATENT_DATA_BASE_URL}?groupBy=status&aggregate=count`,
   PATENT_BY_APPLICANT: `${PATENT_DATA_BASE_URL}?groupBy=applicantName&aggregate=count`,
   PATENT_BY_COUNTRY: `${PATENT_DATA_BASE_URL}?groupBy=country&aggregate=count`,

@@ -10,6 +10,7 @@ import { AuthProvider } from "./services/AuthProvider";
 import { ErrorProvider } from "./services/ErrorProvider";
 import ProtectedRoute from "./components/ProtectedRoute";
 import ErrorBanner from "./components/elements/ErrorBanner";
+import SearchComponent from "./components/Search/Search";
 function App() {
   return (
     <ErrorProvider>
@@ -19,9 +20,18 @@ function App() {
           <div className="App">
             <ErrorBanner />
             <Routes>
+              {/* <Route index element={<SearchHome />} /> */}
               <Route path="/signup" element={<SignUp />} />
               <Route path="/status" element={<Status />} />
 
+              <Route
+                path="/explorer"
+                element={
+                  <ProtectedRoute>
+                    <SearchComponent />
+                  </ProtectedRoute>
+                }
+              />
               <Route
                 path="/chat"
                 element={
