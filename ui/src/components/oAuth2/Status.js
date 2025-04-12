@@ -1,7 +1,9 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import URLs from "../../constants/urls";
 import generateToken from "../../utils/generateToken";
+import { Avatar, Card, CardContent } from "@mui/material";
+import verifiedImage from "../../assets/light-green-verified-badge.png";
 
 const Status = () => {
   const [userInfo, setUserInfo] = useState(null);
@@ -65,16 +67,23 @@ const Status = () => {
   return (
     <div>
       <h1>User Info</h1>
-      <ul>
-        {Object.entries(userInfo).map(([key, value]) => (
-          <li key={key}>
-            <strong>{key}:</strong>{" "}
-            {typeof value === "object"
-              ? JSON.stringify(value)
-              : value.toString()}
-          </li>
-        ))}
-      </ul>
+      <div className="flex items-center justify-center min-h-screen bg-gray-100 p-4">
+        <Card className="w-full max-w-md rounded-2xl shadow-lg">
+          <CardContent className="p-6 flex flex-col items-center text-center">
+            <Avatar className="w-24 h-24 mb-4"></Avatar>
+            <h2 className="text-2xl font-semibold mb-1">{userInfo.name}</h2>
+            <p className="text-gray-600 mb-2">
+              {userInfo.email || "Email not provided"}
+            </p>
+            {userInfo.email_verified ? (
+              <img src={verifiedImage} alt="Verified" />
+            ) : (
+              ""
+            )}
+            <div className="flex gap-2 mt-4"></div>
+          </CardContent>
+        </Card>
+      </div>
       <button
         onClick={handleLogout}
         style={{

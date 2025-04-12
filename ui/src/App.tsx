@@ -11,6 +11,7 @@ import { ErrorProvider } from "./services/ErrorProvider";
 import ProtectedRoute from "./components/ProtectedRoute";
 import ErrorBanner from "./components/elements/ErrorBanner";
 import SearchComponent from "./components/Search/Search";
+import HomePage from "./components/Home/HomePage";
 function App() {
   return (
     <ErrorProvider>
@@ -20,7 +21,7 @@ function App() {
           <div className="App">
             <ErrorBanner />
             <Routes>
-              {/* <Route index element={<SearchHome />} /> */}
+              <Route index element={<HomePage />} />
               <Route path="/signup" element={<SignUp />} />
               <Route path="/status" element={<Status />} />
 
