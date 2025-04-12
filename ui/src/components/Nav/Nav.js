@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { Menu, X } from "lucide-react";
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import Login from "../Login";
 import LogoutPopup from "../LogoutPopup";
 import { useAuth } from "../../services/AuthProvider";
-
+import "./Nav.css";
 const Nav = () => {
   const { userInfo } = useAuth();
 
@@ -12,37 +12,38 @@ const Nav = () => {
   const [showLogin, setShowLogin] = useState(false);
   const [showLogoutModal, setShowLogoutModal] = useState(false);
 
+  const navLinkClass = ({ isActive }) => `nav-link ${isActive ? "active" : ""}`;
   const loggedInTabs = (
     <ul className="navbar-nav ms-auto mb-2 mb-lg-0">
       <li className="nav-item">
-        <Link to="/" className="nav-link">
+        <NavLink to="/" className={navLinkClass}>
           Home
-        </Link>
+        </NavLink>
       </li>
       <li className="nav-item">
-        <Link to="/explorer" className="nav-link">
+        <NavLink to="/explorer" className={navLinkClass}>
           Explore
-        </Link>
+        </NavLink>
       </li>
       <li className="nav-item">
-        <Link to="/services" className="nav-link">
+        <NavLink to="/services" className={navLinkClass}>
           Services
-        </Link>
+        </NavLink>
       </li>
       <li className="nav-item">
-        <Link to="/status" className="nav-link">
-          Status
-        </Link>
+        <NavLink to="/status" className={navLinkClass}>
+          Profile
+        </NavLink>
       </li>
       <li className="nav-item">
-        <Link to="/analytics" className="nav-link">
+        <NavLink to="/analytics" className={navLinkClass}>
           Analytics
-        </Link>
+        </NavLink>
       </li>
       <li className="nav-item">
-        <Link to="/chat" className="nav-link">
+        <NavLink to="/chat" className={navLinkClass}>
           Chat
-        </Link>
+        </NavLink>
       </li>
       <li className="nav-item">
         <button
@@ -61,9 +62,9 @@ const Nav = () => {
   const loggedOutTabs = (
     <ul className="navbar-nav ms-auto mb-2 mb-lg-0">
       <li className="nav-item">
-        <Link to="/" className="nav-link">
+        <NavLink to="/" className={navLinkClass}>
           Home
-        </Link>
+        </NavLink>
       </li>
       <li className="nav-item">
         <button
@@ -80,7 +81,7 @@ const Nav = () => {
   );
   return (
     <>
-      <nav className="navbar navbar-expand-md navbar-light bg-light shadow-sm p-3">
+      <nav className="navbar navbar-expand-md  bg-nav sticky-top  shadow-sm p-3">
         <div className="container-fluid">
           <h1 className="navbar-brand">CS5224</h1>
           <button
@@ -91,7 +92,7 @@ const Nav = () => {
             {isOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
           <div className={`collapse navbar-collapse ${isOpen ? "show" : ""}`}>
-            {userInfo?.authenticated || true ? loggedInTabs : loggedOutTabs}
+            {userInfo?.authenticated ? loggedInTabs : loggedOutTabs}
           </div>
         </div>
       </nav>

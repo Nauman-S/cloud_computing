@@ -1,4 +1,8 @@
-@tailwind base;
+:root {
+  --nav-link-default: #555;
+  --nav-link-hover: #007bff;
+  --nav-link-active: #0056b3;
+}
 .App {
   text-align: center;
 }
