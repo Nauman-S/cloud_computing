@@ -18,7 +18,7 @@ https://frontend.ipos.naumansajid.com
 
 
 ## Contributers
-1. Sneha Kumar 
+1. Sneha Kumar (Sneha Kr)
 2. Nauman Sajid (Nauman-S)
 3. Abdul Cader (caderpmh)
 4. Li Yuting 
