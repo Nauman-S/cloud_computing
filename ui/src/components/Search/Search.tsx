@@ -112,9 +112,9 @@ export default function SearchComponent() {
       }, {});
 
     axios
-      .get(activeTab == "basic" ? URLs.SEARCH : URLs.SEARCH_SMART, {
+      .get(activeTab === "basic" ? URLs.SEARCH : URLs.SEARCH_SMART, {
         params:
-          activeTab == "basic"
+          activeTab === "basic"
             ? queryParams
             : { queryText: formData.queryText },
         headers: {
@@ -178,8 +178,8 @@ export default function SearchComponent() {
             </li>
           </ul>
           <div className="tab-content p-3 border border-top-0">
-            {activeTab == "basic" && fields.map(searchFormMapper)}
-            {activeTab == "smart" &&
+            {activeTab === "basic" && fields.map(searchFormMapper)}
+            {activeTab === "smart" &&
               smartSearchFields.map((field) => (
                 <FormField
                   key={field.name}

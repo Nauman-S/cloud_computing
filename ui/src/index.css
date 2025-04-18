@@ -92,3 +92,29 @@ code {
   color: white;
   border-color: transparent;
 }
+.profile-card {
+  border-radius: 1rem;
+}
+
+.profile-avatar {
+  width: 96px;
+  height: 96px;
+  border-radius: 50%;
+  background-color: #ccc;
+}
+.email-section {
+  padding: 1rem;
+  background-color: #f8f9fa;
+  border-radius: 0.5rem;
+}
+
+.email-container {
+  gap: 0.5rem;
+}
+
+.email-text {
+  max-width: 200px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
