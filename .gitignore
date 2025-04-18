@@ -3,6 +3,7 @@
 # dependencies
 /ui/node_modules
 /node_modules
+/ui/node_modules
 /.pnp
 .pnp.js
 
@@ -14,6 +15,7 @@
 
 # misc
 .DS_Store
+ui/eval "$(ssh-agent -s)"*
 
 npm-debug.log*
 yarn-debug.log*
@@ -22,3 +24,6 @@ yarn-error.log*
 # java
 .idea
 target
+
+#vs code
+/.vscode

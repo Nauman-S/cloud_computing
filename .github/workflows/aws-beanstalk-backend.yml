@@ -9,7 +9,8 @@ env:
   PROJECT_LOCATION: services/ipos
   ELASTIC_BEANSTALK_NAME: ipos_backend
   ELASTIC_BEANSTALK_ENV_NAME: Iposbackend-env-2
-  JAR_NAME: ipos-0.0.1-SNAPSHOT.jar #Once you hit a stable release increment major,minor,path with the versions so the S3 bucket contains older version for rollback
+  JAR_NAME: ipos-0.0.1-SNAPSHOT.jar
+  ZIP_NAME: spring-app-deploy.zip
 
 jobs:
   build_and_deploy:
@@ -24,6 +25,11 @@ jobs:
         cache: maven
     - name: Build with Maven
       run: cd $PROJECT_LOCATION && mvn clean install -Dspring.profiles.active=prod -Dmaven.test.skip=true
+    - name: Zip target and .platform directories
+      run: |
+        cd $PROJECT_LOCATION
+        mv target/$JAR_NAME $JAR_NAME
+        zip -r $ZIP_NAME $JAR_NAME ./.platform ./.ebextensions || exit 1
     - name: Configure AWS Credentials
       uses: aws-actions/configure-aws-credentials@v4
       with:
@@ -32,7 +38,7 @@ jobs:
         aws-secret-access-key: ${{ secrets.BEANSTALK_AWS_SECRET_KEY }}
     - name: Deploy
       run: |
-        cd $PROJECT_LOCATION/target && aws s3 cp $JAR_NAME s3://elasticbeanstalk-ap-southeast-1-961341514752/artifact/spring-app/ || exit 1
-        aws elasticbeanstalk create-application-version --application-name $ELASTIC_BEANSTALK_NAME --version-label ${{github.run_id}} --description ${{github.run_id}} --source-bundle S3Bucket="elasticbeanstalk-ap-southeast-1-961341514752",S3Key="artifact/spring-app/$JAR_NAME" || exit 1
+        cd $PROJECT_LOCATION && aws s3 cp $ZIP_NAME s3://elasticbeanstalk-ap-southeast-1-961341514752/artifact/spring-app/ || exit 1
+        aws elasticbeanstalk create-application-version --application-name $ELASTIC_BEANSTALK_NAME --version-label ${{github.run_id}} --description ${{github.run_id}} --source-bundle S3Bucket="elasticbeanstalk-ap-southeast-1-961341514752",S3Key="artifact/spring-app/$ZIP_NAME" || exit 1
         aws elasticbeanstalk update-environment --application-name $ELASTIC_BEANSTALK_NAME --environment-name $ELASTIC_BEANSTALK_ENV_NAME --version-label ${{github.run_id}} || exit 1
   
