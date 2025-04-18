@@ -26,11 +26,6 @@ const Nav = () => {
         </NavLink>
       </li>
       <li className="nav-item">
-        <NavLink to="/services" className={navLinkClass}>
-          Services
-        </NavLink>
-      </li>
-      <li className="nav-item">
         <NavLink to="/status" className={navLinkClass}>
           Profile
         </NavLink>

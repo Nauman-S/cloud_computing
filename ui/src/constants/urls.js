@@ -34,6 +34,7 @@ const URLs = {
 
   //SEARCH
   SEARCH: `${PATENT_DATA_BASE_URL}/search`,
+  SEARCH_SMART: `${PATENT_DATA_BASE_URL}/vectorSearch`,
 };
 
 export default URLs;
