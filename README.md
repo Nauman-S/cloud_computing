@@ -9,9 +9,9 @@ https://frontend.ipos.naumansajid.com
 ```
 
 ## Features  
-- ✅ Smart Search using keyword and LLM-based semantic matching for more precise results
-- ✅ Interactive Analytics Dashboard for insights discovery and competitive analysis,
-- ✅ Real-Time Alerts to notify users for relevant new fillings.
+- ✅ Smart Search using keyword and LLM-based semantic matching for precise results
+- ✅ Interactive Analytics Dashboard for insights discovery and competitive analysis
+- ✅ Real-Time Customizable Alerts to get notified of new filings 
 
 
 ## Architecture Diagram  
@@ -43,7 +43,8 @@ https://frontend.ipos.naumansajid.com
 |   |   ├── 🔑 .platform             # AWS Configuration 
 |   |   ├── 📂 src/
 |   |   ├── 📜 pom.xml  
-│   └── 🐹 iposCron                  # Golang Cron
+│   ├── 🐹 iposCron                  # Golang Cron
+|   └── 🧠 createEmbeddingsCron      # Python Backend   
 ├── 📂 ui/                           # React UI
 │   ├── 📂 src/
 │   └── 🔑 staticwebapp.config.json  # Azure Config
