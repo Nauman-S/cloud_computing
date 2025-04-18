@@ -1,12 +1,8 @@
 # IP Hawks
 
 > Project for CS5224 cloud computing AY24/25
-
-
-![Logo](logo.png)  
-
 > Intellectual Property (IP) analytics  [dashboard](https://frontend.ipos.naumansajid.com "IP Hawks WebPage")
-
+![Logo](logo.png)  
 ## Usage  
 ```bash
 https://frontend.ipos.naumansajid.com
