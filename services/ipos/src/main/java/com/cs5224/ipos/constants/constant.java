@@ -6,6 +6,8 @@ public class constant {
     public static final String SINGAPORE = "SG";
     public static final String OTHER_COUNTRY = "NOT-SG";
 
+    public static final String REDIRECT_URI = "redirect";
 
+    public static final String CSRF = "CSRF-TOKEN";
 
 }
