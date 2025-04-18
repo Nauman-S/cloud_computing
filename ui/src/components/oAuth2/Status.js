@@ -66,20 +66,26 @@ const Status = () => {
 
   return (
     <div>
-      <h1>User Info</h1>
-      <div className="flex items-center justify-center min-h-screen bg-gray-100 p-4">
+      <h1>Profile</h1>
+      <div className="flex items-start justify-start min-h-screen bg-gray-100 p-4">
         <Card className="w-full max-w-md rounded-2xl shadow-lg">
-          <CardContent className="p-6 flex flex-col items-center text-center">
-            <Avatar className="w-24 h-24 mb-4"></Avatar>
-            <h2 className="text-2xl font-semibold mb-1">{userInfo.name}</h2>
-            <p className="text-gray-600 mb-2">
-              {userInfo.email || "Email not provided"}
-            </p>
-            {userInfo.email_verified ? (
-              <img src={verifiedImage} alt="Verified" />
-            ) : (
-              ""
-            )}
+          <CardContent className="p-6 flex flex-col">
+            <div className="p-6 flex flex-row">
+              <Avatar className="w-24 h-24 mb-4"></Avatar>
+              <h2 className="text-2xl font-semibold mb-1">{userInfo.name}</h2>
+            </div>
+            <div className="email-section p-3">
+              <label className="fw-semibold d-block mb-1">Email</label>
+              <div className="d-flex align-items-center mb-2">
+                <span className="me-2">{userInfo.email}</span>
+                {userInfo.email_verified && (
+                  <span className="verified-badge">Verified</span>
+                )}
+              </div>
+              <button className="btn btn-outline-primary btn-sm">
+                Update email
+              </button>
+            </div>
             <div className="flex gap-2 mt-4"></div>
           </CardContent>
         </Card>

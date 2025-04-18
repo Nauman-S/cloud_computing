@@ -1,3 +1,6 @@
+.bg-nav {
+  background-color: #cbd3df;
+}
 .nav-link {
   transition: color 0.3s ease;
   color: var(--nav-link-default);

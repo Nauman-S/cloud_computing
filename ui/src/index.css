@@ -59,3 +59,36 @@ code {
 .landing-content button:hover {
   background: #f3f4f6;
 }
+
+/* profile page */
+.verified-badge {
+  background-color: #2dac62;
+  color: #eaeff3;
+  font-size: 0.875rem;
+  padding: 2px 8px;
+  border-radius: 20px;
+}
+.custom-tabs {
+  background-color: #f8fafc;
+  border-bottom: 2px solid #e2e8f0;
+}
+
+.custom-tabs .nav-link {
+  color: #475569;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  border: none;
+  margin-right: 5px;
+  border-radius: 0.5rem 0.5rem 0 0;
+}
+
+.custom-tabs .nav-link:hover {
+  background-color: #e2e8f0;
+  color: #1e3a8a;
+}
+
+.custom-tabs .nav-link.active {
+  background-color: #3b82f6;
+  color: white;
+  border-color: transparent;
+}
