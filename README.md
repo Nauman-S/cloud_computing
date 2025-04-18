@@ -44,7 +44,7 @@ https://frontend.ipos.naumansajid.com
 |   |   ├── 📂 src/
 |   |   ├── 📜 pom.xml  
 │   ├── 🐹 iposCron                  # Golang Cron
-|   └── 🧠 createEmbeddingsCron      # Python Backend   
+|   └── 🧠 createEmbeddingsCron      # Python Cron   
 ├── 📂 ui/                           # React UI
 │   ├── 📂 src/
 │   └── 🔑 staticwebapp.config.json  # Azure Config
