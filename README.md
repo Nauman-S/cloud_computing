@@ -20,7 +20,7 @@ https://frontend.ipos.naumansajid.com
 ## Contributers
 1. Sneha Kumar 
 2. Nauman Sajid (Nauman-S)
-3. Abdul Cader
+3. Abdul Cader (caderpmh)
 4. Li Yuting 
 5. Cheng Siyuan
 
