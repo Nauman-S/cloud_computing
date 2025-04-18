@@ -9,9 +9,10 @@ https://frontend.ipos.naumansajid.com
 ```
 
 ## Features  
-- ✅ OAuth Based Login  
-- ✅ Analytics for IPOS patents and filing
-- ✅ RAG Based Chat bot for understanding more about patents
+- ✅ Smart Search using keyword and LLM-based semantic matching for more precise results
+- ✅ Interactive Analytics Dashboard for insights discovery and competitive analysis,
+- ✅ Real-Time Alerts to notify users for relevant new fillings.
+
 
 ## Architecture Diagram  
 ![architecture_diagram](https://github.com/user-attachments/assets/54da967b-4a3a-4f31-baa2-9cd1e60ba8fb)
