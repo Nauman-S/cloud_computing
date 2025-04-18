@@ -19,6 +19,25 @@ public class Patent {
     @Field("applicationNum")
     String applicationNum;
 
+    @Field("summary")
+    String ApplicationSummary;
+
     @Field("documents")
     List<com.cs5224.ipos.model.documents.Document> documentList;
+
+    @Field("applicant.name")
+    String applicantName;
+
+    @Field("applicant.uenCompanyCode")
+    String applicantUen; 
+
+    @Field("applicant.countryOfIncorporationOrResidence")
+    String applicantCountry; 
+
+    @Field("grantAndReneweal.grantDate")
+    String grantDate; 
+
+    @Field("grantAndRewneal.expiryDate")
+    String expiryDate;
+    
 }

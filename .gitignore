@@ -16,6 +16,7 @@
 # misc
 .DS_Store
 .pdf
+ui/eval "$(ssh-agent -s)"*
 
 npm-debug.log*
 yarn-debug.log*
@@ -24,3 +25,6 @@ yarn-error.log*
 # java
 .idea
 target
+
+#vs code
+/.vscode

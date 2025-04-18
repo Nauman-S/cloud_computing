@@ -1,23 +1,89 @@
 import { useState } from "react";
 import { Menu, X } from "lucide-react";
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import Login from "../Login";
-import FullDashboard from "../Dashboard/FullDashboard";
-
+import LogoutPopup from "../LogoutPopup";
+import { useAuth } from "../../services/AuthProvider";
+import "./Nav.css";
 const Nav = () => {
+  const { userInfo } = useAuth();
+
   const [isOpen, setIsOpen] = useState(false);
   const [showLogin, setShowLogin] = useState(false);
-  const [showDashboard, setShowDashboard] = useState(false);
+  const [showLogoutModal, setShowLogoutModal] = useState(false);
 
-  const handleLinkClick = () => {
-    setShowDashboard(false);
-  };
-
+  const navLinkClass = ({ isActive }) => `nav-link ${isActive ? "active" : ""}`;
+  const loggedInTabs = (
+    <ul className="navbar-nav ms-auto mb-2 mb-lg-0">
+      <li className="nav-item">
+        <NavLink to="/" className={navLinkClass}>
+          Home
+        </NavLink>
+      </li>
+      <li className="nav-item">
+        <NavLink to="/explorer" className={navLinkClass}>
+          Explore
+        </NavLink>
+      </li>
+      <li className="nav-item">
+        <NavLink to="/services" className={navLinkClass}>
+          Services
+        </NavLink>
+      </li>
+      <li className="nav-item">
+        <NavLink to="/status" className={navLinkClass}>
+          Profile
+        </NavLink>
+      </li>
+      <li className="nav-item">
+        <NavLink to="/analytics" className={navLinkClass}>
+          Analytics
+        </NavLink>
+      </li>
+      <li className="nav-item">
+        <NavLink to="/chat" className={navLinkClass}>
+          Chat
+        </NavLink>
+      </li>
+      <li className="nav-item">
+        <button
+          className="btn btn-outline-danger"
+          onClick={() => setShowLogoutModal(true)}
+        >
+          Logout
+        </button>
+        <LogoutPopup
+          show={showLogoutModal}
+          handleClose={() => setShowLogoutModal(false)}
+        />
+      </li>
+    </ul>
+  );
+  const loggedOutTabs = (
+    <ul className="navbar-nav ms-auto mb-2 mb-lg-0">
+      <li className="nav-item">
+        <NavLink to="/" className={navLinkClass}>
+          Home
+        </NavLink>
+      </li>
+      <li className="nav-item">
+        <button
+          className="btn btn-outline-primary"
+          onClick={() => {
+            setShowLogin(true);
+          }}
+        >
+          Login
+        </button>
+        <Login showLogin={showLogin} setShowLogin={setShowLogin} />
+      </li>
+    </ul>
+  );
   return (
     <>
-      <nav className="navbar navbar-expand-md navbar-light bg-light shadow-sm p-3">
+      <nav className="navbar navbar-expand-md  bg-nav sticky-top  shadow-sm p-3">
         <div className="container-fluid">
-          <h1 className="navbar-brand">Logo</h1>
+          <h1 className="navbar-brand">CS5224</h1>
           <button
             className="navbar-toggler"
             type="button"
@@ -26,65 +92,10 @@ const Nav = () => {
             {isOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
           <div className={`collapse navbar-collapse ${isOpen ? "show" : ""}`}>
-            <ul className="navbar-nav ms-auto mb-2 mb-lg-0">
-              <li className="nav-item">
-                <Link to="/" className="nav-link" onClick={handleLinkClick}>
-                  Home
-                </Link>
-              </li>
-              <li className="nav-item">
-                <Link
-                  to="/about"
-                  className="nav-link"
-                  onClick={handleLinkClick}
-                >
-                  About
-                </Link>
-              </li>
-              <li className="nav-item">
-                <Link
-                  to="/services"
-                  className="nav-link"
-                  onClick={handleLinkClick}
-                >
-                  Services
-                </Link>
-              </li>
-              <li className="nav-item">
-                <Link
-                  to="/contact"
-                  className="nav-link"
-                  onClick={handleLinkClick}
-                >
-                  Contact
-                </Link>
-              </li>
-              <li className="nav-item">
-                <button
-                  className="btn btn-primary"
-                  onClick={() => {
-                    setShowLogin(true);
-                    setShowDashboard(false);
-                  }}
-                >
-                  Login
-                </button>
-              </li>
-              <li className="nav-item">
-                <Link
-                  to="/analytics"
-                  className="nav-link"
-                  onClick={() => setShowDashboard(true)}
-                >
-                  Analytics
-                </Link>
-              </li>
-            </ul>
+            {userInfo?.authenticated ? loggedInTabs : loggedOutTabs}
           </div>
         </div>
-        <Login showLogin={showLogin} setShowLogin={setShowLogin} />
       </nav>
-      {showDashboard && <FullDashboard />}
     </>
   );
 };

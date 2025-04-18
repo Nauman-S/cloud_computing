@@ -1,17 +1,15 @@
 package com.cs5224.ipos.controller;
 
-import com.cs5224.ipos.dao.PatentRepository;
-import com.cs5224.ipos.model.documents.Patent;
+import com.cs5224.ipos.command.PatentAggregationCommand;
+import com.cs5224.ipos.command.PatentCommand;
+import com.cs5224.ipos.command.PatentSearchCommand;
+import com.cs5224.ipos.dto.EmbeddingSearchRequest;
+import com.cs5224.ipos.dto.PatentSearchRequest; 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
+import org.springframework.web.bind.annotation.*;
 
 @RequestMapping("/patent")
 @RestController
@@ -19,16 +17,63 @@ import java.util.List;
 public class PatentController {
 
     @Autowired
-    PatentRepository patentRepository;
+    PatentCommand patentCommand;
 
-    @GetMapping("/{applicationNumber}")
-    public ResponseEntity<Patent> patent(@PathVariable String applicationNumber, Authentication authObject) {
-        List<Patent> patentList = patentRepository.findByApplicationNum(applicationNumber);
-        if (patentList.size() > 0 ) {
-            log.error("More than 1 Application exists for application number: {}", applicationNumber);
-        } else if (patentList.isEmpty()) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(patentList.get(0));
+    @Autowired
+    PatentAggregationCommand patentAggregationCommand;
+
+    @Autowired
+    private PatentSearchCommand patentSearchCommand;
+
+    @GetMapping
+    public ResponseEntity<?> patentTemplateQuery(@RequestParam(required=false) String groupBy,
+                                                   @RequestParam(required = false) String aggregate) {
+        return patentAggregationCommand.execute(groupBy,aggregate);
     }
+    @GetMapping("/{applicationNumber}")
+    public ResponseEntity<?> patentQuery(
+            @PathVariable String applicationNumber,
+            Authentication authObject) {
+
+        return patentCommand.execute(applicationNumber);
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<?> searchPatents(
+            @RequestParam(required = false) String applicationNum,
+            // @RequestParam(required = false) String applicationType,
+            @RequestParam(required = false) String applicationStatus,
+            @RequestParam(required = false) String titleOfInvention,
+            @RequestParam(required = false) String filingDateStart,
+            @RequestParam(required = false) String filingDateEnd,
+            @RequestParam(required = false) String lodgementDateStart,
+            @RequestParam(required = false) String lodgementDateEnd
+    ) {
+        PatentSearchRequest searchRequest = new PatentSearchRequest();
+        searchRequest.setApplicationNum(applicationNum);
+        // searchRequest.setApplicationType(applicationType);
+        searchRequest.setApplicationStatus(applicationStatus);
+        searchRequest.setTitleOfInvention(titleOfInvention);
+        searchRequest.setFilingDateStart(filingDateStart);
+        searchRequest.setFilingDateEnd(filingDateEnd);
+        searchRequest.setLodgementDateStart(lodgementDateStart);
+        searchRequest.setLodgementDateEnd(lodgementDateEnd);
+
+        return patentSearchCommand.execute(searchRequest);
+    }
+
+    @GetMapping("/vectorSearch")
+    public ResponseEntity<?> searchByTitleEmbedding(
+        @RequestParam String queryText,
+        @RequestParam(required = false, defaultValue = "0.8") Double similarityThreshold, 
+        @RequestParam(required = false, defaultValue="10") Integer k) {
+
+    EmbeddingSearchRequest request = new EmbeddingSearchRequest();
+    request.setQueryText(queryText);
+    request.setSimilarityThreshold(similarityThreshold);
+    request.setK(k);
+    return patentSearchCommand.executeEmbeddingSearch(request);
+}
+
+
 }
