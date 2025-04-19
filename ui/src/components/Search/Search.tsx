@@ -6,6 +6,7 @@ import FormField, { FormFieldProps } from "../elements/FormField";
 import { useError } from "../../services/ErrorProvider";
 import Loading from "../elements/Loading";
 import { SearchFormDataType } from "../../modals/PatentSearchForm";
+import { WIPNotice } from "../elements/WorkInProgress";
 
 const smartSearchFields: FormFieldProps[] = [
   { name: "queryText", label: "Title Of Invention", type: "text" },
@@ -55,13 +56,19 @@ export default function SearchComponent() {
   ]);
 
   const [formData, setFormData] = useState(initialFormData);
-  const [searchResults, setSearchResults] = useState([]);
+  // const [searchResults, setSearchResults] = useState([]);
+  type PatentResult = {
+    applicationNum: string;
+  };
+
+  const [searchResults, setSearchResults] = useState<PatentResult[]>([]);
   // const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
   const [currentPage, setCurrentPage] = useState(1);
   const [resultsPerPage, setResultsPerPage] = useState(20);
-  const [activeTab, setActiveTab] = useState("basic");
+  const [activeTab, setActiveTab] = useState("patents");
+  const [smartSearchEnabled, setSmartSearchEnabled] = useState(false);
   // Reset page to 1 whenever results change or perPage changes
   useEffect(() => {
     setCurrentPage(1);
@@ -111,29 +118,63 @@ export default function SearchComponent() {
         return acc;
       }, {});
 
-    axios
-      .get(activeTab === "basic" ? URLs.SEARCH : URLs.SEARCH_SMART, {
-        params:
-          activeTab === "basic"
-            ? queryParams
-            : { queryText: formData.queryText },
-        headers: {
-          "X-TESTER-REQUEST": "tester_secret_api_key",
-        },
-        withCredentials: true,
-      })
-      .then((response) => setSearchResults(response.data ?? []))
-      .catch((error) => {
-        const errorMessage =
-          error?.response?.status === 404
-            ? "Failed to fetch search results"
-            : "System unable to process the request. Please try again later!";
-        showError(errorMessage);
-        setSearchResults([]);
-      })
-      .finally(() => setLoading(false));
+    try {
+      if (activeTab === "basic") {
+        const title = formData.titleOfInvention.trim();
+        // Smart case: combine both APIs
+        if (smartSearchEnabled && title.length >= 2) {
+          const [basicRes, smartRes] = await Promise.all([
+            axios.get(URLs.SEARCH, {
+              params: queryParams,
+              headers: { "X-TESTER-REQUEST": "tester_secret_api_key" },
+              withCredentials: true,
+            }),
+            axios.get(URLs.SEARCH_SMART, {
+              params: { queryText: title, similarityThreshold: 0.65 },
+              headers: { "X-TESTER-REQUEST": "tester_secret_api_key" },
+              withCredentials: true,
+            }),
+          ]);
+          const basicData = basicRes.data ?? [];
+          const smartData = smartRes.data ?? [];
+          // dedupe by applicationNum
+          const combined = [...basicData, ...smartData];
+          const unique = combined.filter(
+            (item, i, arr) =>
+              arr.findIndex((t) => t.applicationNum === item.applicationNum) ===
+              i
+          );
+          setSearchResults(unique);
+        } else {
+          // regular basic search
+          const res = await axios.get(URLs.SEARCH, {
+            params: queryParams,
+            headers: { "X-TESTER-REQUEST": "tester_secret_api_key" },
+            withCredentials: true,
+          });
+          setSearchResults(res.data ?? []);
+        }
+      } else {
+        // Smart tab (left empty in UI, but still callable if user switches)
+        const res = await axios.get(URLs.SEARCH_SMART, {
+          params: { queryText: formData.titleOfInvention },
+          headers: { "X-TESTER-REQUEST": "tester_secret_api_key" },
+          withCredentials: true,
+        });
+        setSearchResults(res.data ?? []);
+      }
+    } catch (err: any) {
+      const msg =
+        err?.response?.status === 404
+          ? "No results found"
+          : "System unable to process the request. Please try again later!";
+      showError(msg);
+      setSearchResults([]);
+    } finally {
+      setLoading(false);
+    }
   };
-  const handleTabChange = (tabName: "basic" | "smart") => {
+  const handleTabChange = (tabName: "patents" | "trademarks") => {
     setActiveTab(tabName);
   };
   const searchFormMapper = (field: FormFieldProps) => (
@@ -162,48 +203,80 @@ export default function SearchComponent() {
           <ul className="nav nav-tabs custom-tabs">
             <li className="nav-item">
               <button
-                className={`nav-link ${activeTab === "basic" ? "active" : ""}`}
-                onClick={() => handleTabChange("basic")}
+                className={`nav-link ${
+                  activeTab === "patents" ? "active" : ""
+                }`}
+                onClick={() => handleTabChange("patents")}
               >
-                Basic Search
+                Patents
               </button>
             </li>
             <li className="nav-item">
               <button
-                className={`nav-link ${activeTab === "smart" ? "active" : ""}`}
-                onClick={() => handleTabChange("smart")}
+                className={`nav-link ${
+                  activeTab === "trademarks" ? "active" : ""
+                }`}
+                onClick={() => handleTabChange("trademarks")}
               >
-                Smart Search
+                Trademarks
               </button>
             </li>
           </ul>
           <div className="tab-content p-3 border border-top-0">
-            {activeTab === "basic" && fields.map(searchFormMapper)}
-            {activeTab === "smart" &&
-              smartSearchFields.map((field) => (
-                <FormField
-                  key={field.name}
-                  name={field.name}
-                  label={field.label}
-                  type={field.type}
-                  value={
-                    formData[
-                      `${field.name}Start` as keyof SearchFormDataType
-                    ] ||
-                    formData[field.name as keyof SearchFormDataType] ||
-                    ""
-                  }
-                  valueEnd={
-                    formData[`${field.name}End` as keyof SearchFormDataType] ||
-                    ""
-                  }
-                  onChange={handleChange}
-                  onChangeEnd={handleChange}
-                  placeholder={field.label}
-                  // error={errors[field.name]}
-                  options={field.options}
-                />
-              ))}
+            {activeTab === "patents" &&
+              fields.map((field) =>
+                field.name === "titleOfInvention" ? (
+                  <div
+                    key={field.name}
+                    className="d-flex align-items-center gap-3"
+                  >
+                    {searchFormMapper(field)}
+                    <div className="form-check">
+                      <input
+                        className="form-check-input"
+                        type="checkbox"
+                        id="smartSearchToggle"
+                        checked={smartSearchEnabled}
+                        onChange={() => setSmartSearchEnabled((prev) => !prev)}
+                      />
+                      <label
+                        className="form-check-label d-flex align-items-center gap-1"
+                        htmlFor="smartSearchToggle"
+                      >
+                        Enable smart search for Title of Invention
+                      </label>
+                    </div>
+                  </div>
+                ) : (
+                  searchFormMapper(field)
+                )
+              )}
+            {activeTab === "trademarks" && (
+              // smartSearchFields.map((field) => (
+              //   <FormField
+              //     key={field.name}
+              //     name={field.name}
+              //     label={field.label}
+              //     type={field.type}
+              //     value={
+              //       formData[
+              //         `${field.name}Start` as keyof SearchFormDataType
+              //       ] ||
+              //       formData[field.name as keyof SearchFormDataType] ||
+              //       ""
+              //     }
+              //     valueEnd={
+              //       formData[`${field.name}End` as keyof SearchFormDataType] ||
+              //       ""
+              //     }
+              //     onChange={handleChange}
+              //     onChangeEnd={handleChange}
+              //     placeholder={field.label}
+              //     // error={errors[field.name]}
+              //     options={field.options}
+              //   />
+              <WIPNotice />
+            )}
           </div>
         </div>
         <div className="d-flex justify-start gap-3">
