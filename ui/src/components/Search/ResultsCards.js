@@ -1,7 +1,15 @@
-import React from "react";
+import React, { useState } from "react";
 import { Accordion, Card, Button } from "react-bootstrap";
+import { PatentDetailsModal } from "../PatentDetails";
 
 const ResultsCards = ({ data }) => {
+  const [selectedPatentId, setSelectedPatentId] = useState(null);
+  const handleOpen = (id) => setSelectedPatentId(id);
+  const handleClose = () => setSelectedPatentId(null);
+
+  const selectedPatent = data.find(
+    (p) => p.applicationNum === selectedPatentId
+  );
   return (
     <div className="container mt-4">
       <h2 className="mb-4">Search Results</h2>
@@ -62,7 +70,7 @@ const ResultsCards = ({ data }) => {
                   <Button
                     variant="outline-primary"
                     size="sm"
-                    onClick={() => alert("Show more details...")}
+                    onClick={() => handleOpen(item.applicationNum)}
                   >
                     View More Details
                   </Button>
@@ -72,6 +80,13 @@ const ResultsCards = ({ data }) => {
           );
         })}
       </Accordion>
+      {selectedPatent && (
+        <PatentDetailsModal
+          show={!!selectedPatentId}
+          handleClose={handleClose}
+          data={selectedPatent}
+        />
+      )}
     </div>
   );
 };
