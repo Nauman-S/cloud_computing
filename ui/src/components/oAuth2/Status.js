@@ -3,11 +3,11 @@ import axios from "axios";
 import URLs from "../../constants/urls";
 import generateToken from "../../utils/generateToken";
 import { useError } from "../../services/ErrorProvider";
+import Notification from "../elements/Notification";
 
 const Status = () => {
   const [userInfo, setUserInfo] = useState(null);
   const { showError, clearError } = useError();
-  const [notificationsEnabled, setNotificationsEnabled] = useState(true);
   useEffect(() => {
     clearError();
     const fetchUserInfo = async () => {
@@ -59,33 +59,9 @@ const Status = () => {
                     <span className="badge bg-success me-3">Verified</span>
                   )}
                 </div>
-                <button
-                  disabled
-                  className="btn btn-outline-primary btn-sm mt-2 mt-sm-0"
-                >
-                  Update Email
-                </button>
               </div>
             </div>
-            <div className="d-flex flex-column align-items-start mb-4">
-              <h3>Notification</h3>
-              <div className="text-muted mb-2">Get real-time updates</div>
-
-              <div className="form-check form-switch">
-                <input
-                  className="form-check-input"
-                  type="checkbox"
-                  id="realtimeSwitch"
-                  checked={notificationsEnabled}
-                  onChange={() =>
-                    setNotificationsEnabled(!notificationsEnabled)
-                  }
-                />
-                <label className="form-check-label" htmlFor="realtimeSwitch">
-                  Enable notifications
-                </label>
-              </div>
-            </div>
+            <Notification defaultEnabled={true} />
           </div>
         </div>
       </div>
