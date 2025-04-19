@@ -1,10 +1,9 @@
 package com.cs5224.ipos.service.search;
 
 import com.cs5224.ipos.dto.EmbeddingSearchRequest;
-import com.cs5224.ipos.service.EmbeddingService;
+import com.cs5224.ipos.service.embedding.EmbeddingService;
 import com.cs5224.ipos.dto.PatentSearchRequest;
 import com.cs5224.ipos.model.documents.Patent;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.jms.activemq.ActiveMQProperties.Embedded;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.bson.Document;
@@ -13,7 +12,6 @@ import org.springframework.data.mongodb.core.aggregation.AggregationOperation;
 import org.springframework.data.mongodb.core.aggregation.AggregationResults;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
-import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
