@@ -14,11 +14,12 @@ https://frontend.ipos.naumansajid.com
 - ✅ Search for Patents and filings
 - 🛠️ RAG Based Chat bot for patents (Work in Progress)
 - 🛠️ Real time alert notifications (Work in Progress)
+
 ## Architecture Diagram  
 ![architecture_diagram](https://github.com/user-attachments/assets/54da967b-4a3a-4f31-baa2-9cd1e60ba8fb)
 
 
-## Contributers
+## Contributors
 1. Sneha Kumar (snehakumaarr)
 2. Nauman Sajid (Nauman-S)
 3. Abdul Cader (caderpmh)
