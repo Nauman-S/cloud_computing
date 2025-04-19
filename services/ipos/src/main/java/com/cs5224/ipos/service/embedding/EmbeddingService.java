@@ -38,10 +38,15 @@ public class EmbeddingService {
      * @return a List of Doubles representing the embedding vector.
      */
     public List<Double> getEmbedding(String text) {
-        // Get Embedding
-        Response<Embedding> response = embeddingModel.embed(text);
-        Embedding embedding = response.content();
-       
-        return embedding.vector();  
+    Response<Embedding> response = embeddingModel.embed(text);
+    Embedding embedding = response.content();
+
+    float[] floatArray = embedding.vector();
+    List<Double> doubleList = new java.util.ArrayList<>(floatArray.length);
+    for (float f : floatArray) {
+        doubleList.add((double) f);
     }
+
+    return doubleList;
+}
 }
