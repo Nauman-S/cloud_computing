@@ -10,10 +10,11 @@ https://frontend.ipos.naumansajid.com
 
 ## Features  
 - ✅ OAuth Based Login  
-- ✅ Trend Analytics for IPOS patents and filing
-- ✅ Search for Patents and filings
+- ✅ Trend Analytics for IPOS Patents filing
+- ✅ Search for Patents filings
 - 🛠️ RAG Based Chat bot for patents (Work in Progress)
 - 🛠️ Real time alert notifications (Work in Progress)
+- 🛠️ Coverage of IPOS Trademarks and Designs (Work in Progress)
 
 ## Architecture Diagram  
 ![architecture_diagram drawio](https://github.com/user-attachments/assets/9df27d42-ab3c-4c92-b4e2-4df894a5673b)
@@ -35,12 +36,10 @@ https://frontend.ipos.naumansajid.com
 IP Analytics platform powered by data from data.gov
 
 Features are only accessible after authentication from a identity provider. Valid JSESSION ID and xcsrf token is required
-
-
-- 🚀 Explore   - Search applications based on various criteria
-- 🔎 Analytics - View Trends in patents
-- 🤖 Chatbot   - RAG based chatbot for advanced queries
-- 📥 Daily Alerts - Email notifications for newly listed patents
+- 🚀 Explore   - Search filings based on various criteria, enhanced with LLM-based semantic search capabilities
+- 🔎 Analytics - View trends of IP filings
+- 📥 Daily Alerts - Customizable email notifications for newly listed IP filings 
+- 🤖 Chat   - RAG based chatbot for advanced queries
 
 
 ### Directory structure
@@ -48,13 +47,13 @@ Features are only accessible after authentication from a identity provider. Vali
 📦 project-root/
 ├── 📂 .github/                      # Workflows
 ├── 📂 services/                     # Source code
-│   ├── 🌱  ipos                     # Spring Boot Backend
+│   ├── 🐍 createEmbeddingsCron      # Python Cron for embeddings
+|   ├── 🌱  ipos                     # Spring Boot Backend
 |   |   ├── 🔑 .ebextensions         # AWS Configuration 
 |   |   ├── 🔑 .platform             # AWS Configuration 
 |   |   ├── 📂 src/
 |   |   ├── 📜 pom.xml  
-│   ├── 🐹 iposCron                  # Golang Cron for Mongo DB Population
-|   └── 🐍 createEmbeddingsCron      # Python Cron for embeddings
+│   └──  🐹 iposCron                 # Golang Cron for Mongo DB Population
 ├── 📂 ui/                           # React UI
 │   ├── 📂 src/
 │   └── 🔑 staticwebapp.config.json  # Azure Config
