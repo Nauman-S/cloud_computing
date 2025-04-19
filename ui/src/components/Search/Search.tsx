@@ -130,7 +130,7 @@ export default function SearchComponent() {
               withCredentials: true,
             }),
             axios.get(URLs.SEARCH_SMART, {
-              params: { queryText: title, similarityThreshold: 0.65 },
+              params: { queryText: title, similarityThreshold: 0.68, k: 200 },
               headers: { "X-TESTER-REQUEST": "tester_secret_api_key" },
               withCredentials: true,
             }),
