@@ -16,7 +16,8 @@ https://frontend.ipos.naumansajid.com
 - 🛠️ Real time alert notifications (Work in Progress)
 
 ## Architecture Diagram  
-![architecture_diagram](https://github.com/user-attachments/assets/54da967b-4a3a-4f31-baa2-9cd1e60ba8fb)
+![architecture_diagram drawio](https://github.com/user-attachments/assets/9df27d42-ab3c-4c92-b4e2-4df894a5673b)
+
 
 
 ## Contributors
