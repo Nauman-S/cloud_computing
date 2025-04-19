@@ -1,12 +1,12 @@
 package com.cs5224.ipos.security;
-//MOVE RATELIMITER BEFORE AUTHNETICATIONPROVIDER
-//
+// MOVE RATELIMITER BEFORE AUTHENTICATIONPROVIDER
 
 import com.cs5224.ipos.filters.TestersSecretAuthenticationFilter;
 import com.cs5224.ipos.security.authProviders.TesterAuthenticationProvider;
 import com.cs5224.ipos.service.user.CustomOAuth2UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.actuate.autoconfigure.security.servlet.EndpointRequest;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -44,52 +44,58 @@ public class SecurityConfig {
 
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity security, AuthenticationManager authenticationManager) throws Exception {
-        CookieCsrfTokenRepository cookieCsrfTokenRepository =  CookieCsrfTokenRepository.withHttpOnlyFalse();
-        return security.authorizeHttpRequests(requestComingIn -> {
-                    if (disableSecurity) {
-                        requestComingIn.requestMatchers("/**").permitAll();
-
+        CookieCsrfTokenRepository cookieCsrfTokenRepository = CookieCsrfTokenRepository.withHttpOnlyFalse();
+        return security
+            .authorizeHttpRequests(request -> {
+                if (disableSecurity) {
+                    request.requestMatchers("/**").permitAll();
+                } else {
+                    // Allow unauthenticated access to specific Actuator endpoints
+                    request.requestMatchers(EndpointRequest.to("health", "info", "mappings")).permitAll();
+                    // Allow open user and chat stream paths
+                    request.requestMatchers("/user/**").permitAll();
+                    request.requestMatchers("/chat/stream/**").permitAll();
+                    // Secure everything else with authority
+                    request.requestMatchers("/**").hasAuthority(ALL_ACCESS_AUTHORITY);
+                    request.anyRequest().authenticated();
+                }
+            })
+            .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+            .csrf(csrf -> csrf
+                .ignoringRequestMatchers("/user/redirect")
+                .csrfTokenRepository(cookieCsrfTokenRepository)
+            )
+            .exceptionHandling(ex -> ex.authenticationEntryPoint((req, res, exAuth) -> {
+                SecurityContextHolder.getContext().getAuthentication();
+                res.setStatus(HttpStatus.UNAUTHORIZED.value());
+            }))
+            .oauth2Login(oauth2 -> oauth2
+                .authorizationEndpoint(a -> a.baseUri("/oauth2/authorization"))
+                .redirectionEndpoint(r -> r.baseUri("/login/oauth2/code/*"))
+                .successHandler((req, res, auth) -> {
+                    res.setStatus(HttpStatus.FOUND.value());
+                    if (req.getSession() != null) {
+                        CsrfToken csrfToken = cookieCsrfTokenRepository.generateToken(req);
+                        cookieCsrfTokenRepository.saveToken(csrfToken, req, res);
+                        req.getSession().setAttribute(CSRF, csrfToken.getToken());
+                        res.sendRedirect(redirectUri);
+                        log.info("Redirecting to {}", req.getSession().getAttribute(redirectUri));
                     } else {
-                        requestComingIn.requestMatchers("/user/**").permitAll();
-                        requestComingIn.requestMatchers("/chat/stream/**").permitAll();
-                        requestComingIn.requestMatchers("/**").hasAuthority(ALL_ACCESS_AUTHORITY);
-                        requestComingIn.anyRequest().authenticated();
+                        res.sendRedirect("https://brave-desert-074ebc30f.4.azurestaticapps.net");
                     }
                 })
-                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
-                .csrf(csrf -> csrf
-                        .ignoringRequestMatchers("/user/redirect")
-                        .csrfTokenRepository(cookieCsrfTokenRepository)
-                )
-                .exceptionHandling(exceptions -> exceptions.authenticationEntryPoint(((request, response, authException) -> {
-                    SecurityContextHolder.getContext().getAuthentication();
-                    response.setStatus(HttpStatus.UNAUTHORIZED.value());
-                })))
-                .oauth2Login(
-                        oauth2 -> oauth2
-                                .authorizationEndpoint(configurer -> configurer.baseUri("/oauth2/authorization"))
-                                .redirectionEndpoint(configurer -> configurer.baseUri("/login/oauth2/code/*"))
-                                .successHandler(((request, response, authentication) -> {
-                                    response.setStatus(HttpStatus.FOUND.value());
-                                    if (!Objects.isNull(request.getSession())) {
-                                        CsrfToken csrfToken = cookieCsrfTokenRepository.generateToken(request);
-                                        cookieCsrfTokenRepository.saveToken(csrfToken, request, response);
-                                        request.getSession().setAttribute(CSRF, csrfToken.getToken());
-                                        response.sendRedirect(redirectUri);
-                                        log.info("\nRedirecting to {}\n", request.getSession().getAttribute(redirectUri));
-                                    } else {
-                                        response.sendRedirect("https://brave-desert-074ebc30f.4.azurestaticapps.net");
-                                    }
-                                }))
-                )
-                .addFilterBefore(new TestersSecretAuthenticationFilter(authenticationManager), AuthorizationFilter.class)
-                .authenticationManager(authenticationManager)
-                .build();
+            )
+            .addFilterBefore(new TestersSecretAuthenticationFilter(authenticationManager), AuthorizationFilter.class)
+            .authenticationManager(authenticationManager)
+            .build();
     }
 
     @Bean
     public OAuth2LoginAuthenticationProvider oauth2LoginAuthenticationProvider() {
-        return new OAuth2LoginAuthenticationProvider(new DefaultAuthorizationCodeTokenResponseClient(), new CustomOAuth2UserService());
+        return new OAuth2LoginAuthenticationProvider(
+            new DefaultAuthorizationCodeTokenResponseClient(),
+            new CustomOAuth2UserService()
+        );
     }
 
     @Bean
@@ -99,26 +105,24 @@ public class SecurityConfig {
 
     @Bean
     ApplicationListener<AuthenticationSuccessEvent> listener() {
-        return (evt) -> {
+        return evt -> {
             var auth = evt.getAuthentication();
-            log.info("Auth Success [%s]", auth.getName());
+            log.info("Auth Success [{}]", auth.getName());
         };
-
     }
-
 
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowedOrigins(Arrays.asList(
-                "http://localhost:3000",
-                "https://localhost:3000",
-                "https://brave-desert-074ebc30f.4.azurestaticapps.net",
-                "https://frontend.ipos.naumansajid.com"
+            "http://localhost:3000",
+            "https://localhost:3000",
+            "https://brave-desert-074ebc30f.4.azurestaticapps.net",
+            "https://frontend.ipos.naumansajid.com"
         ));
         config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(Arrays.asList("*"));
         config.setAllowCredentials(true);
-        config.addExposedHeader("Set-Cookie"); //Allows Cookie Headers in CORS requests
+        config.addExposedHeader("Set-Cookie"); // Allows Cookie headers in CORS requests
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", config);

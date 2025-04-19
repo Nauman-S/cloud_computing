@@ -40,3 +40,12 @@ logging:
     org:
       springframework:
         security: TRACE
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,mappings
+  endpoint:
+    health:
+      show-details: always
