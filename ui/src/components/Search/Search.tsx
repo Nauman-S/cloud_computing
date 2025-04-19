@@ -119,7 +119,7 @@ export default function SearchComponent() {
       }, {});
 
     try {
-      if (activeTab === "basic") {
+      if (activeTab === "patents") {
         const title = formData.titleOfInvention.trim();
         // Smart case: combine both APIs
         if (smartSearchEnabled && title.length >= 2) {
