@@ -65,8 +65,10 @@ public class PatentController {
     @GetMapping("/vectorSearch")
     public ResponseEntity<?> searchByTitleEmbedding(
         @RequestParam String queryText,
-        @RequestParam(required = false, defaultValue = "0.8") Double similarityThreshold, 
-        @RequestParam(required = false, defaultValue="10") Integer k) {
+        @RequestParam(required = false, defaultValue = "0.2") Double similarityThreshold, 
+        @RequestParam(required = false, defaultValue="50") Integer k) {
+
+    log.info("🔥 in vectorSearch, queryText={} threshold={} k={}", queryText, similarityThreshold, k);
 
     EmbeddingSearchRequest request = new EmbeddingSearchRequest();
     request.setQueryText(queryText);

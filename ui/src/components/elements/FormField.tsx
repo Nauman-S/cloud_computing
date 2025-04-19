@@ -2,7 +2,6 @@ import React from "react";
 
 const FormField: React.FC<FormFieldProps> = ({
   label,
-  id,
   name,
   type = "text",
   value,
@@ -17,13 +16,13 @@ const FormField: React.FC<FormFieldProps> = ({
 
   return (
     <div className="mb-3 text-start">
-      <label htmlFor={id} className="form-label fw-semibold">
+      <label htmlFor={name} className="form-label fw-semibold">
         {label}
       </label>
 
       {type === "select" ? (
         <select
-          id={id}
+          id={name}
           name={name}
           className={inputClass}
           value={value}
@@ -38,7 +37,7 @@ const FormField: React.FC<FormFieldProps> = ({
       ) : type === "date-range" ? (
         <div className="d-flex flex-row align-items-end gap-2">
           <input
-            id={`${id}-start`}
+            id={`${name}-start`}
             name={`${name}Start`}
             type="date"
             className={inputClass}
@@ -49,7 +48,7 @@ const FormField: React.FC<FormFieldProps> = ({
             <p className="align-text-bottom">To</p>
           </span>
           <input
-            id={`${id}-end`}
+            id={`${name}-end`}
             name={`${name}End`}
             type="date"
             className={inputClass}
@@ -59,7 +58,7 @@ const FormField: React.FC<FormFieldProps> = ({
         </div>
       ) : (
         <input
-          id={id}
+          id={name}
           name={name}
           type={type}
           className={inputClass}
@@ -91,11 +90,10 @@ export interface Option {
 
 export interface FormFieldProps {
   label: string;
-  id: string;
-  name?: string;
+  name: string;
   type?: InputType;
-  value: any;
-  onChange: (
+  value?: string;
+  onChange?: (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => void;
   placeholder?: string;

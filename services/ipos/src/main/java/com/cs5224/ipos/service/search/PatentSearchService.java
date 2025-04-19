@@ -1,10 +1,10 @@
 package com.cs5224.ipos.service.search;
 
 import com.cs5224.ipos.dto.EmbeddingSearchRequest;
-import com.cs5224.ipos.service.EmbeddingService;
+import com.cs5224.ipos.service.embedding.EmbeddingService;
+import lombok.extern.slf4j.Slf4j;
 import com.cs5224.ipos.dto.PatentSearchRequest;
 import com.cs5224.ipos.model.documents.Patent;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.jms.activemq.ActiveMQProperties.Embedded;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.bson.Document;
@@ -13,7 +13,6 @@ import org.springframework.data.mongodb.core.aggregation.AggregationOperation;
 import org.springframework.data.mongodb.core.aggregation.AggregationResults;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
-import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -24,6 +23,7 @@ import java.util.List;
 import static com.cs5224.ipos.constants.MongoConstants.PATENT_COLLECTION;
 
 @Service
+@Slf4j
 public class PatentSearchService {
 
     private final MongoTemplate mongoTemplate;
@@ -90,13 +90,13 @@ public class PatentSearchService {
     public List<Patent> searchByTitleKeyword(EmbeddingSearchRequest request) {
     // Convert keyword to vector:
     List<Double> queryVector = embeddingService.getEmbedding(request.getQueryText());
-    
+    log.info("📐 Generated query vector size={} first10={}", queryVector.size(), queryVector.subList(0, Math.min(10, queryVector.size())));
     // Build the aggregation pipeline
     List<AggregationOperation> pipeline = new ArrayList<>();
     
     // search using knnBeta
     Document knnSearch = new Document("$search",
-        new Document("index", "title_vector") 
+        new Document("index", "title-search") 
         .append("knnBeta", new Document("vector", queryVector)
                               .append("path", "titleEmbeddings")
                               .append("k", request.getK()))
@@ -118,9 +118,10 @@ public class PatentSearchService {
     pipeline.add(Aggregation.match(Criteria.where("score").gte(request.getSimilarityThreshold())));
     
     Aggregation aggregation = Aggregation.newAggregation(pipeline);
-    AggregationResults<Patent> aggResults = mongoTemplate.aggregate(aggregation, "your_collection_name", Patent.class);
-    
+    AggregationResults<Patent> aggResults = mongoTemplate.aggregate(aggregation, "patent", Patent.class);
+
     return aggResults.getMappedResults();
+    
 }
 
 }

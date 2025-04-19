@@ -1,6 +1,9 @@
+import { useState } from "react";
 import FadeInOutCard from "../elements/FadeInOutCard";
+import Login from "../Login";
 
 export default function HomePage() {
+  const [showLogin, setShowLogin] = useState(false);
   const fadeCardsData = [
     {
       image: <SmartSearchIcon />,
@@ -31,10 +34,12 @@ export default function HomePage() {
           </h1>
           <p>
             Gain real-time visibility into your IP assets with powerful
-            analytics and monitoring tools. Stay ahead of threats, track
-            performance, and ensure your network is always secure.
+            analytics and monitoring tools. Stay ahead with latest innovations.
           </p>
-          <button>Start with a free trail</button>
+          <button onClick={() => setShowLogin(true)}>
+            Start with a free trial
+          </button>
+          <Login showLogin={showLogin} setShowLogin={setShowLogin} />
         </div>
       </div>
       <div className="fade-card-container">
