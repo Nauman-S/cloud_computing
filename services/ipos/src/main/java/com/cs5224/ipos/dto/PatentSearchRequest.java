@@ -14,4 +14,6 @@ public class PatentSearchRequest {
     private String lodgementDateEnd;    //lodgement date end range (inclusive)
     private String titleEmbedding;      //title embedding (similarity/vector search)
     private String documentEmbedding;   //document embedding (topic search with vector search)
+    private Integer page; 
+    private Integer pageSize;           //how many docs per page
 }

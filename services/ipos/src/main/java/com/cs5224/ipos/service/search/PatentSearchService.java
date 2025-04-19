@@ -2,6 +2,8 @@ package com.cs5224.ipos.service.search;
 
 import com.cs5224.ipos.dto.EmbeddingSearchRequest;
 import com.cs5224.ipos.service.embedding.EmbeddingService;
+import com.mongodb.client.MongoCollection;
+
 import lombok.extern.slf4j.Slf4j;
 import com.cs5224.ipos.dto.PatentSearchRequest;
 import com.cs5224.ipos.model.documents.Patent;
@@ -13,9 +15,12 @@ import org.springframework.data.mongodb.core.aggregation.AggregationOperation;
 import org.springframework.data.mongodb.core.aggregation.AggregationResults;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.util.CloseableIterator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+import java.util.function.Consumer; 
+import java.util.stream.Stream;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -78,13 +83,54 @@ public class PatentSearchService {
             }
             criteriaList.add(criteria);
         }
+        
 
         Query query = new Query();
         if (!criteriaList.isEmpty()) {
             query.addCriteria(new Criteria().andOperator(criteriaList.toArray(new Criteria[0])));
         }
 
+        // pagination 
+        int page     = request.getPage()     != null ? request.getPage()     : 0;
+    int pageSize = request.getPageSize() != null ? request.getPageSize() : 20;
+    query.skip(page * pageSize)
+         .limit(pageSize);
+
+         // batch size for cursor
+         query.cursorBatchSize(50);
+
+        // //  Explaining mongo query plang
+        // Document queryDoc = query.getQueryObject();
+        // MongoCollection<Document> collection = mongoTemplate.getDb().getCollection(PATENT_COLLECTION);
+        // Document explain = collection.find(queryDoc).explain();
+
+        // System.out.println("=== EXPLAIN PLAN ===");
+        // System.out.println(explain.toJson());
+
         return mongoTemplate.find(query, Patent.class, PATENT_COLLECTION);
+    }
+
+    
+    public void streamPatents(PatentSearchRequest request,
+                            Consumer<Patent> processor) {
+    // build the same Query you already have
+    Query query = buildCriteriaQuery(request);
+
+    // stream(...) now returns a java.util.stream.Stream<Patent>
+    try (Stream<Patent> stream = 
+           mongoTemplate.stream(query, Patent.class, PATENT_COLLECTION)) {
+      stream.forEach(processor);
+    }
+  }
+
+   
+    private Query buildCriteriaQuery(PatentSearchRequest request) {
+        List<Criteria> criteriaList = new ArrayList<>();
+        // … copy your existing criteria‐adding logic here …
+        if (!criteriaList.isEmpty()) {
+            return new Query(new Criteria().andOperator(criteriaList.toArray(new Criteria[0])));
+        }
+        return new Query();
     }
 
     public List<Patent> searchByTitleKeyword(EmbeddingSearchRequest request) {
