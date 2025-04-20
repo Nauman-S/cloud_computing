@@ -13,13 +13,13 @@ export default function HomePage() {
         "Keyword matching and LLM-driven similarity search for precise and context-aware results.",
     },
     {
-      image: <ReatTimeAlertIcon />,
+      image: <AnalyticsIcon />,
       title: "Analytics Dashboard",
       description:
         "View insights on IP assets and monitor competitor activities in real time.",
     },
     {
-      image: <AnalyticsIcon />,
+      image: <ReatTimeAlertIcon />,
       title: "Real-time Alerts",
       description:
         "Set up alerts to monitor new IP filings that match your search preferences.",
