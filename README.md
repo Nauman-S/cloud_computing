@@ -16,6 +16,9 @@ You may use your own Gmail account or the following test Gmail login credentials
 ### Date Coverage for Search/Analytics
 The current patents data in the search results and analytics dashboard covers patent filings for the lodgement date range of 28/09/2019 to 01/09/2020 (dd/mm/yy)
 
+###
+Watch our demo ![here](https://drive.google.com/file/d/1Hr0ZUTTedZ9KjtjPAuR_JGa3eZZmRt0c/view?usp=sharing)
+
 ### Other notes
 - Kindly use a Chrome browser
 - Website has been made inaccessible outside Singapore
