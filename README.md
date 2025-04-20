@@ -26,8 +26,7 @@ The current patents data in the search results and analytics dashboard covers pa
 - 🛠️ Coverage of IPOS Trademarks and Designs (Work in Progress)
 
 ## Architecture Diagram  
-![architecture_diagram drawio](https://github.com/user-attachments/assets/9df27d42-ab3c-4c92-b4e2-4df894a5673b)
-
+![architecture_diagram drawio](https://github.com/user-attachments/assets/abb4df5e-66b1-4bf2-8139-c5ed890f400a)
 
 ## Contributors
 1. Sneha Kumar (snehakumaarr)
