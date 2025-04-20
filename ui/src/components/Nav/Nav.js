@@ -26,11 +26,6 @@ const Nav = () => {
         </NavLink>
       </li>
       <li className="nav-item">
-        <NavLink to="/status" className={navLinkClass}>
-          Profile
-        </NavLink>
-      </li>
-      <li className="nav-item">
         <NavLink to="/analytics" className={navLinkClass}>
           Analytics
         </NavLink>
@@ -38,6 +33,11 @@ const Nav = () => {
       <li className="nav-item">
         <NavLink to="/chat" className={navLinkClass}>
           Chat
+        </NavLink>
+      </li>
+      <li className="nav-item">
+        <NavLink to="/status" className={navLinkClass}>
+          Profile
         </NavLink>
       </li>
       <li className="nav-item">

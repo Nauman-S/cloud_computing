@@ -35,7 +35,13 @@ const fields: FormFieldProps[] = [
       { value: "Withdrawn", label: "Withdrawn" },
     ],
   },
-  { name: "titleOfInvention", label: "Title Of Invention", type: "text" },
+  {
+    name: "titleOfInvention",
+    label: "Title Of Invention",
+    type: "text",
+    tooltipText:
+      "Enabling the smart search will retrieve results that not only match the title of invention keyword, but are also semantically similar in meaning.",
+  },
   {
     name: "filingDate",
     label: "Filing Date Range",
@@ -99,14 +105,14 @@ export default function SearchComponent() {
 
   const handleSearch = async () => {
     clearError();
-    const hasAnyValue = Object.values(formData).some(
-      (value) => value.trim() !== ""
-    );
+    // const hasAnyValue = Object.values(formData).some(
+    //   (value) => value.trim() !== ""
+    // );
 
-    if (!hasAnyValue) {
-      showError("At least 1 field must be filled out");
-      return;
-    }
+    // if (!hasAnyValue) {
+    //   showError("At least 1 field must be filled out");
+    //   return;
+    // }
 
     // setError("");
     setLoading(true);
@@ -119,7 +125,7 @@ export default function SearchComponent() {
       }, {});
 
     try {
-      if (activeTab === "basic") {
+      if (activeTab === "patents") {
         const title = formData.titleOfInvention.trim();
         // Smart case: combine both APIs
         if (smartSearchEnabled && title.length >= 2) {
@@ -130,7 +136,7 @@ export default function SearchComponent() {
               withCredentials: true,
             }),
             axios.get(URLs.SEARCH_SMART, {
-              params: { queryText: title, similarityThreshold: 0.65 },
+              params: { queryText: title, similarityThreshold: 0.68, k: 200 },
               headers: { "X-TESTER-REQUEST": "tester_secret_api_key" },
               withCredentials: true,
             }),
@@ -194,6 +200,7 @@ export default function SearchComponent() {
       placeholder={field.label}
       // error={errors[field.name]}
       options={field.options}
+      tooltipText={field.tooltipText}
     />
   );
   return (
@@ -243,7 +250,7 @@ export default function SearchComponent() {
                         className="form-check-label d-flex align-items-center gap-1"
                         htmlFor="smartSearchToggle"
                       >
-                        Enable smart search for Title of Invention
+                        Enable Smart Search for Title of Invention
                       </label>
                     </div>
                   </div>
@@ -278,6 +285,9 @@ export default function SearchComponent() {
               <WIPNotice />
             )}
           </div>
+          <p className="mt-2 text-muted fst-italic">
+            If no fields are filled, Search will retrieve all results.
+          </p>
         </div>
         <div className="d-flex justify-start gap-3">
           <button className="btn btn-secondary " onClick={handleClear}>
