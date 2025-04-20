@@ -35,7 +35,13 @@ const fields: FormFieldProps[] = [
       { value: "Withdrawn", label: "Withdrawn" },
     ],
   },
-  { name: "titleOfInvention", label: "Title Of Invention", type: "text" },
+  {
+    name: "titleOfInvention",
+    label: "Title Of Invention",
+    type: "text",
+    tooltipText:
+      "Enabling the smart search will retrieve results that not only match the title of invention keyword, but are also semantically similar in meaning.",
+  },
   {
     name: "filingDate",
     label: "Filing Date Range",
@@ -194,6 +200,7 @@ export default function SearchComponent() {
       placeholder={field.label}
       // error={errors[field.name]}
       options={field.options}
+      tooltipText={field.tooltipText}
     />
   );
   return (
