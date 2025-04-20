@@ -10,8 +10,8 @@ https://frontend.ipos.naumansajid.com
 ## Test Account
 ### Login Credentials 
 You may use your own Gmail account or the following test Gmail login credentials:  
-- Email: userabcdef775@gmail.com  
-- Password: cs5224_pass
+- **Email**: userabcdef775@gmail.com  
+- **Password**: cs5224_pass
 
 ### Date Coverage for Search/Analytics
 The current patents data in the search results and analytics dashboard covers patent filings in the lodgement date range of 28/09/2019 to 01/09/2020 (dd/mm/yy)
