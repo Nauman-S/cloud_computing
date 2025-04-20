@@ -17,7 +17,7 @@ You may use your own Gmail account or the following test Gmail login credentials
 The current patents data in the search results and analytics dashboard covers patent filings for the lodgement date range of 28/09/2019 to 01/09/2020 (dd/mm/yy)
 
 ###
-Watch our demo ![here](https://drive.google.com/file/d/1Hr0ZUTTedZ9KjtjPAuR_JGa3eZZmRt0c/view?usp=sharing)
+Watch our demo [here](https://drive.google.com/file/d/1Hr0ZUTTedZ9KjtjPAuR_JGa3eZZmRt0c/view?usp=sharing)
 
 ### Other notes
 - Kindly use a Chrome browser
@@ -33,7 +33,7 @@ Watch our demo ![here](https://drive.google.com/file/d/1Hr0ZUTTedZ9KjtjPAuR_JGa3
 - 🛠️ Coverage of IPOS Trademarks and Designs (Work in Progress)
 
 ## Architecture Diagram  
-![architecture_diagram drawio](https://github.com/user-attachments/assets/abb4df5e-66b1-4bf2-8139-c5ed890f400a)
+[architecture_diagram drawio](https://github.com/user-attachments/assets/abb4df5e-66b1-4bf2-8139-c5ed890f400a)
 
 ## Contributors
 1. Sneha Kumar (snehakumaarr)
