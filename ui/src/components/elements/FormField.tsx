@@ -1,5 +1,6 @@
 import React from "react";
-
+import { OverlayTrigger, Tooltip } from "react-bootstrap";
+import tooltipIcon from "../../assets/tooltip-48.png";
 const FormField: React.FC<FormFieldProps> = ({
   label,
   name,
@@ -11,15 +12,27 @@ const FormField: React.FC<FormFieldProps> = ({
   options = [],
   valueEnd,
   onChangeEnd,
+  tooltipText,
 }) => {
   const inputClass = `form-control ${error ? "is-invalid" : ""}`;
 
   return (
     <div className="mb-3 text-start">
       <label htmlFor={name} className="form-label fw-semibold">
-        {label}
+        {label + " "}
+        {tooltipText && (
+          <OverlayTrigger
+            placement="top"
+            overlay={<Tooltip id={`tooltip-${name}`}>{tooltipText}</Tooltip>}
+          >
+            <img
+              src={tooltipIcon}
+              alt="info"
+              style={{ width: "16px", height: "16px", cursor: "pointer" }}
+            />
+          </OverlayTrigger>
+        )}
       </label>
-
       {type === "select" ? (
         <select
           id={name}
@@ -101,4 +114,5 @@ export interface FormFieldProps {
   options?: Option[]; // For select
   valueEnd?: string; // For date-range end value
   onChangeEnd?: (e: React.ChangeEvent<HTMLInputElement>) => void; // For date-range end
+  tooltipText?: string;
 }
