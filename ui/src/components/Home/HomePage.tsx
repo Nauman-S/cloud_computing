@@ -1,6 +1,7 @@
 import { useState } from "react";
 import FadeInOutCard from "../elements/FadeInOutCard";
 import Login from "../Login";
+import { PlanComparisonModal } from "../PlanComparisonModal";
 
 export default function HomePage() {
   const [showLogin, setShowLogin] = useState(false);
@@ -12,13 +13,13 @@ export default function HomePage() {
         "Keyword matching and LLM-driven similarity search for precise and context-aware results.",
     },
     {
-      image: <ReatTimeAlertIcon />,
+      image: <AnalyticsIcon />,
       title: "Analytics Dashboard",
       description:
         "View insights on IP assets and monitor competitor activities in real time.",
     },
     {
-      image: <AnalyticsIcon />,
+      image: <ReatTimeAlertIcon />,
       title: "Real-time Alerts",
       description:
         "Set up alerts to monitor new IP filings that match your search preferences.",
@@ -36,9 +37,10 @@ export default function HomePage() {
             Gain real-time visibility into your IP assets with powerful
             analytics and monitoring tools. Stay ahead with latest innovations.
           </p>
-          <button onClick={() => setShowLogin(true)}>
+          <button className="me-3" onClick={() => setShowLogin(true)}>
             Start with a free trial
           </button>
+          <PlanComparisonModal></PlanComparisonModal>
           <Login showLogin={showLogin} setShowLogin={setShowLogin} />
         </div>
       </div>
