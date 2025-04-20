@@ -99,14 +99,14 @@ export default function SearchComponent() {
 
   const handleSearch = async () => {
     clearError();
-    const hasAnyValue = Object.values(formData).some(
-      (value) => value.trim() !== ""
-    );
+    // const hasAnyValue = Object.values(formData).some(
+    //   (value) => value.trim() !== ""
+    // );
 
-    if (!hasAnyValue) {
-      showError("At least 1 field must be filled out");
-      return;
-    }
+    // if (!hasAnyValue) {
+    //   showError("At least 1 field must be filled out");
+    //   return;
+    // }
 
     // setError("");
     setLoading(true);
@@ -243,7 +243,7 @@ export default function SearchComponent() {
                         className="form-check-label d-flex align-items-center gap-1"
                         htmlFor="smartSearchToggle"
                       >
-                        Enable smart search for Title of Invention
+                        Enable Smart Search for Title of Invention
                       </label>
                     </div>
                   </div>
@@ -278,6 +278,9 @@ export default function SearchComponent() {
               <WIPNotice />
             )}
           </div>
+          <p className="mt-2 text-muted fst-italic">
+            If no fields are filled, Search will retrieve all results.
+          </p>
         </div>
         <div className="d-flex justify-start gap-3">
           <button className="btn btn-secondary " onClick={handleClear}>
