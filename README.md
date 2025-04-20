@@ -9,7 +9,7 @@ https://frontend.ipos.naumansajid.com
 
 ## Test Account
 ### Login Credentials 
-You may use your own Gmail account or the following test Gmail login credentials: 
+You may use your own Gmail account or the following test Gmail login credentials:  
 Email: userabcdef775@gmail.com
 Password: cs5224_pass
 
