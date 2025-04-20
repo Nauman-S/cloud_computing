@@ -1,6 +1,7 @@
 import { useState } from "react";
 import FadeInOutCard from "../elements/FadeInOutCard";
 import Login from "../Login";
+import { PlanComparisonModal } from "../PlanComparisonModal";
 
 export default function HomePage() {
   const [showLogin, setShowLogin] = useState(false);
@@ -36,9 +37,10 @@ export default function HomePage() {
             Gain real-time visibility into your IP assets with powerful
             analytics and monitoring tools. Stay ahead with latest innovations.
           </p>
-          <button onClick={() => setShowLogin(true)}>
+          <button className="me-3" onClick={() => setShowLogin(true)}>
             Start with a free trial
           </button>
+          <PlanComparisonModal></PlanComparisonModal>
           <Login showLogin={showLogin} setShowLogin={setShowLogin} />
         </div>
       </div>
