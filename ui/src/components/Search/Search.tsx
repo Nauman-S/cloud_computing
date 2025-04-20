@@ -7,6 +7,7 @@ import { useError } from "../../services/ErrorProvider";
 import Loading from "../elements/Loading";
 import { SearchFormDataType } from "../../modals/PatentSearchForm";
 import { WIPNotice } from "../elements/WorkInProgress";
+import { PatentSearchResponse } from "../../modals/PatentSearchResponse";
 
 const smartSearchFields: FormFieldProps[] = [
   { name: "queryText", label: "Title Of Invention", type: "text" },
@@ -63,11 +64,10 @@ export default function SearchComponent() {
 
   const [formData, setFormData] = useState(initialFormData);
   // const [searchResults, setSearchResults] = useState([]);
-  type PatentResult = {
-    applicationNum: string;
-  };
 
-  const [searchResults, setSearchResults] = useState<PatentResult[]>([]);
+  const [searchResults, setSearchResults] = useState<PatentSearchResponse[]>(
+    []
+  );
   // const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -123,6 +123,9 @@ export default function SearchComponent() {
         acc[key] = value;
         return acc;
       }, {});
+    const hasOnlyTitle =
+      Object.keys(queryParams).length === 1 &&
+      "titleOfInvention" in queryParams;
 
     try {
       if (activeTab === "patents") {
@@ -141,16 +144,28 @@ export default function SearchComponent() {
               withCredentials: true,
             }),
           ]);
-          const basicData = basicRes.data ?? [];
-          const smartData = smartRes.data ?? [];
+          const basicData: PatentSearchResponse[] = basicRes.data ?? [];
+          const smartData: PatentSearchResponse[] = smartRes.data ?? [];
           // dedupe by applicationNum
-          const combined = [...basicData, ...smartData];
-          const unique = combined.filter(
-            (item, i, arr) =>
-              arr.findIndex((t) => t.applicationNum === item.applicationNum) ===
-              i
-          );
-          setSearchResults(unique);
+          if (hasOnlyTitle) {
+            const combined = [...basicData, ...smartData];
+            const unique = combined.filter(
+              (item, i, arr) =>
+                arr.findIndex(
+                  (t) => t.applicationNum === item.applicationNum
+                ) === i
+            );
+            setSearchResults(unique);
+          } else {
+            const smartNums = new Set(
+              smartData.map((item) => item.applicationNum)
+            );
+
+            const intersection = basicData.filter((item) =>
+              smartNums.has(item.applicationNum)
+            );
+            setSearchResults(intersection);
+          }
         } else {
           // regular basic search
           const res = await axios.get(URLs.SEARCH, {
